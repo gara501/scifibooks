@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200">
+<defs>
+<filter id="soft" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="10"/></filter>
+<filter id="soft2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+<pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1" fill="#000" opacity="0.14"/></pattern>
+<radialGradient id="vig" cx="50%" cy="42%" r="78%"><stop offset="55%" stop-color="#000" stop-opacity="0"/><stop offset="100%" stop-color="#000" stop-opacity="0.55"/></radialGradient>
+<linearGradient id="vsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070310"/><stop offset="1" stop-color="#16091d"/></linearGradient>
+<radialGradient id="moon" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fbf0d0"/><stop offset="0.6" stop-color="#f0c9a0"/><stop offset="1" stop-color="#e07e6e"/></radialGradient>
+<circle id="bat" cx="0" cy="0" r="1" fill="none"/></defs>
+
+<rect width="800" height="1200" fill="url(#vsky)"/>
+<circle cx="744.4" cy="310.1" r="1.27" fill="#fff" opacity="0.26"/><circle cx="259.4" cy="191.3" r="1.17" fill="#fff" opacity="0.23"/><circle cx="325.2" cy="293.4" r="0.96" fill="#fff" opacity="0.22"/><circle cx="199.9" cy="162.5" r="0.73" fill="#fff" opacity="0.54"/><circle cx="760.3" cy="84.9" r="0.66" fill="#fff" opacity="0.68"/><circle cx="689.6" cy="236.2" r="1.51" fill="#fff" opacity="0.71"/><circle cx="344.2" cy="77.4" r="1.67" fill="#fff" opacity="0.72"/><circle cx="607.6" cy="241.2" r="1.57" fill="#fff" opacity="0.85"/><circle cx="60.4" cy="267.7" r="0.92" fill="#fff" opacity="0.26"/><circle cx="158.1" cy="104.4" r="0.80" fill="#fff" opacity="0.18"/><circle cx="285.0" cy="127.1" r="0.73" fill="#fff" opacity="0.27"/><circle cx="558.9" cy="235.1" r="1.24" fill="#fff" opacity="0.16"/><circle cx="706.2" cy="227.1" r="0.95" fill="#fff" opacity="0.75"/><circle cx="270.1" cy="229.9" r="0.65" fill="#fff" opacity="0.35"/><circle cx="766.1" cy="139.7" r="1.55" fill="#fff" opacity="0.28"/><circle cx="341.1" cy="11.4" r="0.73" fill="#fff" opacity="0.15"/><circle cx="697.1" cy="321.7" r="1.48" fill="#fff" opacity="0.45"/><circle cx="639.2" cy="42.5" r="1.64" fill="#fff" opacity="0.64"/><circle cx="381.5" cy="284.7" r="0.31" fill="#fff" opacity="0.52"/><circle cx="522.2" cy="314.4" r="0.40" fill="#fff" opacity="0.40"/><circle cx="126.9" cy="156.5" r="1.21" fill="#fff" opacity="0.80"/><circle cx="703.1" cy="288.3" r="0.35" fill="#fff" opacity="0.67"/><circle cx="311.9" cy="365.2" r="0.59" fill="#fff" opacity="0.19"/><circle cx="333.4" cy="108.7" r="1.03" fill="#fff" opacity="0.81"/><circle cx="707.8" cy="304.5" r="1.46" fill="#fff" opacity="0.80"/>
+<circle cx="620" cy="200" r="80" fill="url(#moon)" opacity="0.8"/>
+<circle cx="620" cy="200" r="50" fill="#fbf0d0" opacity="0.9"/>
+<g fill="#0a0514"><path d="M0,900 Q150,720 300,850 Q450,980 600,820 Q700,750 800,900 L800,1200 L0,1200 Z"/></g>
+<path d="M100,980 Q250,900 400,940 Q550,980 700,920" stroke="#f0c9a0" stroke-width="2" fill="none" opacity="0.3" filter="url(#soft2)"/>
+<path d="M50,940 Q180,880 320,920" stroke="#e07e6e" stroke-width="1.5" fill="none" opacity="0.25"/>
+<g fill="#1e0d26"><circle cx="150" cy="950" r="40"/><path d="M150,990 Q200,1000 250,950 Q220,1030 150,1030 Q80,1030 50,950 Z"/></g>
+<rect width="800" height="1200" filter="url(#grain)" opacity="0.07"/>
+<rect width="800" height="1200" fill="url(#scan)" opacity="0.5"/>
+<rect width="800" height="1200" fill="url(#vig)"/>
+</svg>
