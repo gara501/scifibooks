@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Menu, Orbit, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
 const links = [
-  { id: '01', label: 'CATÁLOGO', href: '/#catalogo' },
+  { id: '01', label: 'NAVEGANTE', href: '/#navegante' },
   { id: '02', label: 'MAPA', href: '/#mapa' },
   { id: '03', label: 'SCIFAIKU', href: '/#scifaiku' },
   { id: '04', label: 'TIEMPO', href: '/timetravel' },
   { id: '05', label: 'CÁLCULO', href: '/calculus' },
+  { id: '06', label: 'INFLUENCIAS', href: '/influencias' },
 ]
 
 export default function Navbar() {
@@ -50,26 +50,22 @@ export default function Navbar() {
             <Orbit className="size-5" />
           </span>
           <span className="font-heading text-xs font-bold tracking-[0.24em] text-foreground sm:text-sm sm:tracking-[0.3em]">
-            SCIFI<span className="text-primary text-glow">BOOKS</span>
+            SCIFI<span className="text-primary text-glow">UNIVERSE</span>
           </span>
         </a>
 
-        <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
+        <nav className="hidden items-center gap-3 lg:flex xl:gap-5">
           {links.map((link) => (
             <a
               key={link.id}
               href={link.href}
-              className="group text-xs tracking-[0.25em] text-muted-foreground transition-colors hover:text-primary"
+              className="group text-[0.65rem] tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary xl:text-xs"
             >
               <span className="mr-1.5 text-primary/60">[{link.id}]</span>
               {link.label}
             </a>
           ))}
         </nav>
-
-        <Button className="hidden font-heading text-[0.65rem] tracking-[0.2em] lg:inline-flex">
-          ACCEDER AL ARCHIVO
-        </Button>
 
         <button
           type="button"
@@ -105,9 +101,6 @@ export default function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <Button asChild className="mt-3 min-h-11 font-heading text-[0.65rem] tracking-[0.18em]">
-                <a href="#catalogo" onClick={(event) => navigateTo(event, '#catalogo')}>ACCEDER AL ARCHIVO</a>
-              </Button>
             </div>
           </motion.nav>
         )}

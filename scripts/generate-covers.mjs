@@ -1,4 +1,4 @@
-// Generador de portadas procedurales para SCIFIBOOKS.
+// Generador de portadas procedurales para SCIFIUNIVERSE.
 // Cada libro recibe una escena SVG única relacionada con su universo.
 // Uso: node scripts/generate-covers.mjs
 

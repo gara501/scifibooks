@@ -80,9 +80,9 @@ export default function Hero() {
 
           <motion.div variants={fade} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
             <Button asChild size="lg" className="h-12 w-full px-4 font-heading text-[0.68rem] font-bold tracking-[0.16em] sm:w-auto sm:px-7 sm:text-xs sm:tracking-[0.2em]">
-              <a href="#catalogo">
+              <a href="#navegante">
                 <Rocket className="size-4" />
-                EXPLORAR CATÁLOGO
+                ABRIR NAVEGANTE
               </a>
             </Button>
             <Button

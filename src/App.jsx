@@ -3,14 +3,15 @@ import Backdrop from '@/components/Backdrop'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
 import Marquee from '@/components/Marquee'
-import Catalog from '@/components/Catalog'
+import Navigator from '@/pages/Navigator'
 import SciFiGraph from '@/components/SciFiGraph'
 import SciFaiku from '@/components/SciFaiku'
 import Manifesto from '@/components/Manifesto'
 import Footer from '@/components/Footer'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 const TimeTravel = lazy(() => import('@/pages/TimeTravel'))
 const Calculus = lazy(() => import('@/pages/Calculus'))
+const Influences = lazy(() => import('@/pages/Influences'))
 
 function Home() {
   return (
@@ -20,7 +21,7 @@ function Home() {
       <main className="relative z-10">
         <Hero />
         <Marquee />
-        <Catalog />
+        <Navigator />
         <SciFiGraph />
         <SciFaiku />
         <Manifesto />
@@ -38,6 +39,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/timetravel" element={<Suspense fallback={null}><TimeTravel /></Suspense>} />
       <Route path="/calculus" element={<Suspense fallback={null}><Calculus /></Suspense>} />
+      <Route path="/influencias" element={<Suspense fallback={null}><Influences /></Suspense>} />
+      <Route path="/navegante" element={<Navigate to="/#navegante" replace />} />
       <Route path="*" element={<Home />} />
     </Routes>
   )

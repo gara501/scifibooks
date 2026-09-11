@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Dialog } from 'radix-ui'
 import { X, CalendarDays, User, Tag, Users, ChevronRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -7,21 +7,39 @@ import { Separator } from '@/components/ui/separator'
 import { books } from '@/data/books'
 
 const panel = {
-  hidden: { opacity: 0, y: 72, scale: 0.93 },
+  hidden: {
+    opacity: 0,
+    y: 42,
+    scale: 0.96,
+    filter: 'blur(14px) brightness(1.8) saturate(0.3)',
+    clipPath: 'inset(48% 0 48% 0)',
+  },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
+    filter: 'blur(0px) brightness(1) saturate(1)',
+    clipPath: 'inset(0% 0 0% 0)',
     transition: {
-      type: 'spring',
-      stiffness: 230,
-      damping: 26,
-      mass: 0.9,
+      duration: 0.62,
+      ease: [0.22, 1, 0.36, 1],
       staggerChildren: 0.08,
-      delayChildren: 0.15,
+      delayChildren: 0.24,
     },
   },
-  exit: { opacity: 0, y: 48, scale: 0.95, transition: { duration: 0.28, ease: [0.4, 0, 1, 1] } },
+  exit: {
+    opacity: 0,
+    scale: 0.98,
+    filter: 'blur(8px) brightness(1.5)',
+    clipPath: 'inset(50% 0 50% 0)',
+    transition: { duration: 0.3, ease: [0.4, 0, 1, 1] },
+  },
+}
+
+const reducedPanel = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.15 } },
+  exit: { opacity: 0, transition: { duration: 0.15 } },
 }
 
 const item = {
@@ -40,6 +58,7 @@ const charItem = {
 }
 
 export default function BookModal({ book, onSwitch, onClose }) {
+  const reduceMotion = useReducedMotion()
   const related = book
     ? books.filter((b) => b.tag === book.tag && b.code !== book.code).slice(0, 3)
     : []
@@ -61,7 +80,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
 
             <Dialog.Content asChild forceMount aria-describedby={undefined}>
               <motion.div
-                variants={panel}
+                variants={reduceMotion ? reducedPanel : panel}
                 initial="hidden"
                 animate="show"
                 exit="exit"
@@ -69,6 +88,32 @@ export default function BookModal({ book, onSwitch, onClose }) {
                 className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto pt-12 outline-none sm:items-center sm:p-4 md:p-8"
               >
                 <div className="relative w-full max-w-3xl overflow-y-auto rounded-t-xl border border-primary/30 bg-card shadow-[0_0_90px_oklch(0.84_0.165_82/18%)] max-sm:max-h-[calc(100dvh-3rem)] sm:my-auto sm:rounded-xl">
+                  {!reduceMotion ? (
+                    <>
+                      <motion.div
+                        initial={{ top: '-8%', opacity: 0 }}
+                        animate={{ top: ['-8%', '104%'], opacity: [0, 1, 0.9, 0] }}
+                        transition={{ duration: 0.85, times: [0, 0.12, 0.78, 1], ease: 'linear' }}
+                        className="pointer-events-none absolute inset-x-0 z-40 h-16 bg-gradient-to-b from-transparent via-signal/30 to-transparent mix-blend-screen"
+                      >
+                        <span className="absolute inset-x-0 top-1/2 h-px bg-signal shadow-[0_0_18px_oklch(0.8_0.13_190/90%)]" />
+                      </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: [0.7, 0.08, 0.45, 0] }}
+                        transition={{ duration: 0.55, times: [0, 0.2, 0.42, 1] }}
+                        className="pointer-events-none absolute inset-0 z-30 bg-scanlines"
+                      />
+                      <motion.p
+                        initial={{ opacity: 1 }}
+                        animate={{ opacity: 0 }}
+                        transition={{ duration: 0.3, delay: 0.45 }}
+                        className="pointer-events-none absolute bottom-3 right-4 z-40 text-[0.55rem] tracking-[0.24em] text-signal text-glow-signal"
+                      >
+                        MATERIALIZANDO EXPEDIENTE…
+                      </motion.p>
+                    </>
+                  ) : null}
                   <div className="grid md:grid-cols-[240px_1fr]">
                     {/* columna izquierda: portada grande */}
                     <div className="relative h-44 shrink-0 sm:h-56 md:h-auto">

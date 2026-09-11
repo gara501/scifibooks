@@ -10,7 +10,7 @@ export default function Footer() {
           </span>
           <div>
             <p className="font-heading text-xs font-bold tracking-[0.3em]">
-              SCIFI<span className="text-primary">BOOKS</span>
+              SCIFI<span className="text-primary">UNIVERSE</span>
             </p>
             <p className="mt-1 text-[0.6rem] tracking-[0.25em] text-muted-foreground">
               ESTACIÓN ORBITAL K-7 · SECTOR 7G
