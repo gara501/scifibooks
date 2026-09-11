@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Volume2, VolumeX } from 'lucide-react'
+import { play, setEnabled, setVolume } from 'cuelume'
 
 const MUSIC_PATH = '/sounds/music.mp3'
-const EFFECT_PATHS = ['/sounds/swipe.mp3', '/sounds/transition.mp3']
+const INTERACTION_CUES = ['pulse', 'scan', 'page', 'arrival', 'bloom', 'press', 'release']
 const INTERACTIVE_SELECTOR = 'button, a, [role="button"], [data-sound]'
 const STORAGE_KEY = 'scifiuniverse-audio-muted'
 
@@ -17,13 +18,14 @@ function storedMutePreference() {
 export default function Soundscape() {
   const [muted, setMuted] = useState(storedMutePreference)
   const musicRef = useRef(null)
-  const effectsRef = useRef([])
   const unlockedRef = useRef(false)
   const mutedRef = useRef(muted)
   const lastEffectAtRef = useRef(0)
 
   useEffect(() => {
     mutedRef.current = muted
+    setEnabled(!muted)
+    setVolume(0.34)
     try {
       window.localStorage.setItem(STORAGE_KEY, String(muted))
     } catch {
@@ -48,14 +50,6 @@ export default function Soundscape() {
     music.muted = mutedRef.current
     musicRef.current = music
 
-    const effectPools = EFFECT_PATHS.map((path) => Array.from({ length: 3 }, () => {
-      const audio = new Audio(path)
-      audio.preload = 'auto'
-      audio.volume = 0.28
-      return audio
-    }))
-    effectsRef.current = effectPools
-
     const handleInteraction = (event) => {
       const target = event.target instanceof Element ? event.target.closest(INTERACTIVE_SELECTOR) : null
       if (!target || target.dataset.sound === 'none') return
@@ -70,19 +64,15 @@ export default function Soundscape() {
       if (now - lastEffectAtRef.current < 90) return
       lastEffectAtRef.current = now
 
-      const pool = effectPools[Math.floor(Math.random() * effectPools.length)]
-      const effect = pool.find((audio) => audio.paused || audio.ended) || pool[0]
-      effect.currentTime = 0
-      effect.play().catch(() => {})
+      const cue = INTERACTION_CUES[Math.floor(Math.random() * INTERACTION_CUES.length)]
+      play(cue, { volume: 0.72 })
     }
 
     document.addEventListener('click', handleInteraction)
     return () => {
       document.removeEventListener('click', handleInteraction)
       music.pause()
-      effectPools.flat().forEach((effect) => effect.pause())
       musicRef.current = null
-      effectsRef.current = []
     }
   }, [])
 
