@@ -4,6 +4,7 @@ import { ArrowLeft, Atom, Gauge, Orbit, Radio, Ruler, Zap } from 'lucide-react'
 import Backdrop from '@/components/Backdrop'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import { Link } from 'react-router-dom'
 
 const G = 9.80665
 const LIGHT_YEAR_KM = 9.4607304725808e12
@@ -170,7 +171,7 @@ export default function Calculus() {
       <Backdrop /><Navbar />
       <main className="relative z-10 pb-24 pt-28 md:pb-32 md:pt-36">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <a href="/" className="mb-10 inline-flex min-h-11 items-center gap-2 border border-primary/25 bg-primary/5 px-4 text-[0.62rem] tracking-[0.2em] text-primary hover:bg-primary hover:text-primary-foreground"><ArrowLeft className="size-4" /> VOLVER AL ARCHIVO</a>
+          <Link to="/" className="mb-10 inline-flex min-h-11 items-center gap-2 border border-primary/25 bg-primary/5 px-4 text-[0.62rem] tracking-[0.2em] text-primary hover:bg-primary hover:text-primary-foreground"><ArrowLeft className="size-4" /> VOLVER AL ARCHIVO</Link>
           <motion.header initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} className="mb-14 border-b border-primary/20 pb-12 md:mb-20 md:pb-16">
             <p className="mb-4 flex items-center gap-2 text-[0.62rem] tracking-[0.3em] text-primary"><Atom className="size-4" /> // LABORATORIO DE FÍSICA NARRATIVA</p>
             <h1 className="max-w-5xl font-heading text-[clamp(2.2rem,7vw,5.6rem)] leading-[0.98] font-extrabold tracking-tight">CÁLCULO <span className="text-primary text-glow">ESPECULATIVO</span></h1>

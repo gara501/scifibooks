@@ -1,19 +1,22 @@
 import { motion } from 'motion/react'
 import { ArrowLeft, Clock3, Orbit, RadioTower } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { timelineEvents } from '@/data/timeline'
+
+const MotionLink = motion.create(Link)
 
 export default function GenreTimeline() {
   return (
     <main className="relative z-10 overflow-hidden pb-24 pt-28 md:pb-32 md:pt-36">
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
-        <motion.a
-          href="/"
+        <MotionLink
+          to="/"
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           className="mb-10 inline-flex min-h-11 items-center gap-2 border border-primary/25 bg-primary/5 px-4 text-[0.62rem] tracking-[0.22em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
         >
           <ArrowLeft className="size-4" /> VOLVER AL ARCHIVO
-        </motion.a>
+        </MotionLink>
 
         <motion.header
           initial={{ opacity: 0, y: 28 }}

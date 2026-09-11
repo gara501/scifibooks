@@ -6,6 +6,7 @@ import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { books } from '@/data/books'
 import { edges } from '@/utils/influences'
+import { Link } from 'react-router-dom'
 
 const WIDTH = 1540
 const HEIGHT = 920
@@ -92,7 +93,7 @@ export default function Influences() {
       <Backdrop />
       <Navbar />
       <main className="relative z-10 mx-auto max-w-[1500px] px-4 pb-20 pt-28 sm:px-6 lg:pt-32">
-        <a href="/" className="inline-flex items-center gap-2 text-[0.65rem] tracking-[0.2em] text-muted-foreground transition hover:text-primary"><ArrowLeft className="size-4" /> VOLVER AL ARCHIVO</a>
+        <Link to="/" className="inline-flex items-center gap-2 text-[0.65rem] tracking-[0.2em] text-muted-foreground transition hover:text-primary"><ArrowLeft className="size-4" /> VOLVER AL ARCHIVO</Link>
 
         <header className="mt-8 grid gap-6 border-b border-primary/20 pb-9 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
@@ -144,7 +145,7 @@ export default function Influences() {
                     const dimmed = activeCode && !isActive
                     const color = edge.tipo === 'autor' ? 'var(--signal)' : 'var(--primary)'
                     return <g key={key}>
-                      <path d={edgePath(edge)} fill="none" stroke="transparent" strokeWidth="15" className="cursor-pointer" onClick={() => { setSelectedEdge(edge); setSelectedCode(edge.target) }}><title>{edge.nota}</title></path>
+                      <path data-sound d={edgePath(edge)} fill="none" stroke="transparent" strokeWidth="15" className="cursor-pointer" onClick={() => { setSelectedEdge(edge); setSelectedCode(edge.target) }}><title>{edge.nota}</title></path>
                       <motion.path d={edgePath(edge)} fill="none" stroke={color} strokeWidth={isActive ? 2.5 : 1} strokeOpacity={dimmed ? 0.055 : isActive ? 0.95 : 0.22} strokeDasharray={edge.tipo === 'autor' ? '7 6' : undefined} markerEnd={isActive ? `url(#arrow-${edge.tipo === 'autor' ? 'author' : 'influence'})` : undefined} initial={reduceMotion ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 0.7, delay: Math.min(index * 0.008, 0.5) }} className="pointer-events-none"><title>{edge.nota}</title></motion.path>
                     </g>
                   })}

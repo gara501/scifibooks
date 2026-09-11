@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Menu, Orbit, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const links = [
   { id: '01', label: 'NAVEGANTE', href: '/#navegante' },
@@ -13,22 +14,6 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-
-  const navigateTo = (event, href) => {
-    if (!href.startsWith('#')) return
-    event.preventDefault()
-    setOpen(false)
-
-    window.setTimeout(() => {
-      const target = document.querySelector(href)
-      if (!target) return
-
-      const headerOffset = 64
-      const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset
-      window.history.pushState(null, '', href)
-      window.scrollTo({ top: targetTop, behavior: 'smooth' })
-    }, 260)
-  }
 
   useEffect(() => {
     if (!open) return undefined
@@ -45,25 +30,25 @@ export default function Navbar() {
       className="fixed inset-x-0 top-0 z-50 border-b border-primary/15 bg-background/80 backdrop-blur-md"
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <a href="#" className="group flex items-center gap-3">
+        <Link to="/" onClick={() => setOpen(false)} className="group flex items-center gap-3">
           <span className="grid size-9 place-items-center border border-primary/40 bg-primary/10 text-primary">
             <Orbit className="size-5" />
           </span>
           <span className="font-heading text-xs font-bold tracking-[0.24em] text-foreground sm:text-sm sm:tracking-[0.3em]">
             SCIFI<span className="text-primary text-glow">UNIVERSE</span>
           </span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-3 lg:flex xl:gap-5">
           {links.map((link) => (
-            <a
+            <Link
               key={link.id}
-              href={link.href}
+              to={link.href}
               className="group text-[0.65rem] tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary xl:text-xs"
             >
               <span className="mr-1.5 text-primary/60">[{link.id}]</span>
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -91,15 +76,15 @@ export default function Navbar() {
           >
             <div className="mx-auto grid max-w-7xl px-4 py-3">
               {links.map((link) => (
-                <a
+                <Link
                   key={link.id}
-                  href={link.href}
-                  onClick={(event) => navigateTo(event, link.href)}
+                  to={link.href}
+                  onClick={() => setOpen(false)}
                   className="flex min-h-12 items-center border-b border-primary/10 text-xs tracking-[0.22em] text-foreground last:border-0"
                 >
                   <span className="mr-3 text-primary/70">[{link.id}]</span>
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </motion.nav>
