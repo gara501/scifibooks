@@ -4,16 +4,18 @@ import { Menu, Orbit, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const links = [
-  { id: '01', label: 'CATÁLOGO', href: '#catalogo' },
-  { id: '02', label: 'MAPA', href: '#mapa' },
-  { id: '03', label: 'SCIFAIKU', href: '#scifaiku' },
-  { id: '04', label: 'MANIFIESTO', href: '#manifiesto' },
+  { id: '01', label: 'CATÁLOGO', href: '/#catalogo' },
+  { id: '02', label: 'MAPA', href: '/#mapa' },
+  { id: '03', label: 'SCIFAIKU', href: '/#scifaiku' },
+  { id: '04', label: 'TIEMPO', href: '/timetravel' },
+  { id: '05', label: 'CÁLCULO', href: '/calculus' },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
   const navigateTo = (event, href) => {
+    if (!href.startsWith('#')) return
     event.preventDefault()
     setOpen(false)
 
@@ -52,7 +54,7 @@ export default function Navbar() {
           </span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
           {links.map((link) => (
             <a
               key={link.id}
@@ -65,14 +67,14 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <Button className="hidden font-heading text-[0.65rem] tracking-[0.2em] md:inline-flex">
+        <Button className="hidden font-heading text-[0.65rem] tracking-[0.2em] lg:inline-flex">
           ACCEDER AL ARCHIVO
         </Button>
 
         <button
           type="button"
           onClick={() => setOpen((current) => !current)}
-          className="grid size-11 place-items-center border border-primary/35 bg-primary/5 text-primary md:hidden"
+          className="grid size-11 place-items-center border border-primary/35 bg-primary/5 text-primary lg:hidden"
           aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={open}
           aria-controls="mobile-navigation"
@@ -89,7 +91,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-primary/15 bg-background/95 backdrop-blur-xl md:hidden"
+            className="overflow-hidden border-t border-primary/15 bg-background/95 backdrop-blur-xl lg:hidden"
           >
             <div className="mx-auto grid max-w-7xl px-4 py-3">
               {links.map((link) => (

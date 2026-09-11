@@ -1103,5 +1103,10 @@ export const books = [
   },
 ]
 
+// Cada ficha usa una portada editorial de ImageGen optimizada para la web.
+for (const book of books) {
+  book.cover = `/covers/illustrated/${book.code.toLowerCase()}.webp`
+}
+
 // Categorías únicas para el filtro del catálogo
 export const tags = [...new Set(books.map((b) => b.tag))].sort()
