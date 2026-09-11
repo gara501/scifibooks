@@ -13,6 +13,21 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false)
 
+  const navigateTo = (event, href) => {
+    event.preventDefault()
+    setOpen(false)
+
+    window.setTimeout(() => {
+      const target = document.querySelector(href)
+      if (!target) return
+
+      const headerOffset = 64
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset
+      window.history.pushState(null, '', href)
+      window.scrollTo({ top: targetTop, behavior: 'smooth' })
+    }, 260)
+  }
+
   useEffect(() => {
     if (!open) return undefined
     const closeOnEscape = (event) => event.key === 'Escape' && setOpen(false)
@@ -81,7 +96,7 @@ export default function Navbar() {
                 <a
                   key={link.id}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(event) => navigateTo(event, link.href)}
                   className="flex min-h-12 items-center border-b border-primary/10 text-xs tracking-[0.22em] text-foreground last:border-0"
                 >
                   <span className="mr-3 text-primary/70">[{link.id}]</span>
@@ -89,7 +104,7 @@ export default function Navbar() {
                 </a>
               ))}
               <Button asChild className="mt-3 min-h-11 font-heading text-[0.65rem] tracking-[0.18em]">
-                <a href="#catalogo" onClick={() => setOpen(false)}>ACCEDER AL ARCHIVO</a>
+                <a href="#catalogo" onClick={(event) => navigateTo(event, '#catalogo')}>ACCEDER AL ARCHIVO</a>
               </Button>
             </div>
           </motion.nav>
