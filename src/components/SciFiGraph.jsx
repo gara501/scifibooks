@@ -35,22 +35,22 @@ export default function SciFiGraph() {
   const isEdgeDimmed = (e) => focusId && !isEdgeHot(e)
 
   return (
-    <section id="mapa" className="relative scroll-mt-24 border-t border-primary/15 py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="mapa" className="relative scroll-mt-20 border-t border-primary/15 py-16 md:scroll-mt-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* cabecera */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 flex flex-wrap items-end justify-between gap-6"
+          className="mb-8 flex flex-wrap items-end justify-between gap-5 md:mb-12 md:gap-6"
         >
           <div>
             <p className="mb-3 flex items-center gap-2 text-[0.65rem] tracking-[0.35em] text-primary">
               <Network className="size-3.5" />
               // CARTOGRAFÍA DEL GÉNERO
             </p>
-            <h2 className="font-heading text-3xl font-extrabold tracking-tight md:text-5xl">
+            <h2 className="font-heading text-2xl font-extrabold tracking-tight sm:text-3xl md:text-5xl">
               MAPA DE <span className="text-primary text-glow">SUBGÉNEROS</span>
             </h2>
           </div>
@@ -67,12 +67,12 @@ export default function SciFiGraph() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="relative overflow-hidden rounded-xl border border-primary/20 bg-card/40"
+            className="relative overflow-x-auto overflow-y-hidden rounded-xl border border-primary/20 bg-card/40 [scrollbar-color:var(--phosphor)_transparent]"
           >
             <div className="absolute inset-0 bg-grid opacity-60" />
             <svg
               viewBox={`0 0 ${VB_W} ${VB_H}`}
-              className="relative h-auto w-full"
+              className="relative h-auto min-w-[700px] lg:min-w-0 lg:w-full"
               role="img"
               aria-label="Grafo interactivo de subgéneros de la ciencia ficción"
             >
@@ -218,8 +218,12 @@ export default function SciFiGraph() {
             </svg>
           </motion.div>
 
+          <p className="-mt-3 flex items-center gap-2 text-[0.58rem] tracking-[0.16em] text-muted-foreground lg:hidden">
+            <span className="text-primary">←</span> DESLIZA EL MAPA PARA EXPLORAR <span className="text-primary">→</span>
+          </p>
+
           {/* panel de detalle */}
-          <div className="relative min-h-80">
+          <div className="relative min-h-0 lg:min-h-80">
             <AnimatePresence mode="wait">
               {selected ? (
                 <motion.aside
@@ -228,7 +232,7 @@ export default function SciFiGraph() {
                   animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
                   exit={{ opacity: 0, x: -24, filter: 'blur(6px)' }}
                   transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex h-full max-h-[52rem] flex-col overflow-y-auto rounded-xl border border-primary/30 bg-card/80 p-6 shadow-[0_0_50px_oklch(0.84_0.165_82/8%)] md:p-8"
+                  className="flex h-full max-h-[52rem] flex-col overflow-y-auto rounded-xl border border-primary/30 bg-card/80 p-5 shadow-[0_0_50px_oklch(0.84_0.165_82/8%)] md:p-8"
                 >
                   <div className="mb-4 flex items-start justify-between gap-4">
                     <Badge
@@ -241,7 +245,7 @@ export default function SciFiGraph() {
                       type="button"
                       onClick={() => setSelected(null)}
                       aria-label="Cerrar detalle"
-                      className="grid size-7 cursor-pointer place-items-center border border-primary/30 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                      className="grid size-11 cursor-pointer place-items-center border border-primary/30 text-muted-foreground transition-colors hover:border-primary hover:text-primary sm:size-9"
                     >
                       <X className="size-3.5" />
                     </button>

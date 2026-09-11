@@ -2,8 +2,8 @@ import { Orbit } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className="relative py-14">
-      <div className="mx-auto flex max-w-7xl flex-col items-center gap-8 px-6 text-center md:flex-row md:justify-between md:text-left">
+    <footer className="relative py-10 sm:py-14">
+      <div className="mx-auto flex max-w-7xl flex-col items-center gap-7 px-4 text-center sm:px-6 md:flex-row md:justify-between md:text-left">
         <div className="flex items-center gap-3">
           <span className="grid size-9 place-items-center border border-primary/40 bg-primary/10 text-primary">
             <Orbit className="size-5" />

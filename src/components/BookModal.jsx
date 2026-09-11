@@ -66,12 +66,12 @@ export default function BookModal({ book, onSwitch, onClose }) {
                 animate="show"
                 exit="exit"
                 onClick={(e) => e.target === e.currentTarget && onClose()}
-                className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 outline-none md:p-8"
+                className="fixed inset-0 z-50 flex items-end justify-center overflow-y-auto pt-12 outline-none sm:items-center sm:p-4 md:p-8"
               >
-                <div className="relative my-auto w-full max-w-3xl overflow-hidden rounded-xl border border-primary/30 bg-card shadow-[0_0_90px_oklch(0.84_0.165_82/18%)]">
+                <div className="relative w-full max-w-3xl overflow-y-auto rounded-t-xl border border-primary/30 bg-card shadow-[0_0_90px_oklch(0.84_0.165_82/18%)] max-sm:max-h-[calc(100dvh-3rem)] sm:my-auto sm:rounded-xl">
                   <div className="grid md:grid-cols-[240px_1fr]">
                     {/* columna izquierda: portada grande */}
-                    <div className="relative h-56 md:h-auto">
+                    <div className="relative h-44 shrink-0 sm:h-56 md:h-auto">
                       <motion.img
                         src={book.cover}
                         alt={`Ilustración de ${book.title}`}
@@ -93,7 +93,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
                           whileTap={{ scale: 0.9 }}
                           transition={{ type: 'spring', stiffness: 300, damping: 18 }}
                           aria-label="Cerrar expediente"
-                          className="absolute top-4 right-4 grid size-9 cursor-pointer place-items-center border border-primary/40 bg-background/70 text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground"
+                          className="absolute top-3 right-3 grid size-11 cursor-pointer place-items-center border border-primary/40 bg-background/80 text-primary backdrop-blur-sm transition-colors hover:bg-primary hover:text-primary-foreground sm:top-4 sm:right-4 sm:size-9"
                         >
                           <X className="size-4" />
                         </motion.button>
@@ -101,7 +101,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
                     </div>
 
                     {/* columna derecha: expediente */}
-                    <div className="space-y-5 p-6 md:p-8">
+                    <div className="space-y-4 p-4 sm:space-y-5 sm:p-6 md:p-8">
                       <motion.div variants={item} className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.65rem] tracking-[0.25em] text-muted-foreground">
                         <Badge
                           variant="outline"
@@ -122,7 +122,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
 
                       <motion.div variants={item}>
                         <Dialog.Title asChild>
-                          <h3 className="font-heading text-2xl font-extrabold tracking-tight text-foreground md:text-3xl">
+                          <h3 className="font-heading text-xl font-extrabold tracking-tight text-foreground sm:text-2xl md:text-3xl">
                             {book.title}
                           </h3>
                         </Dialog.Title>
@@ -179,7 +179,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
 
                       <motion.div variants={item} className="flex items-center justify-between pt-2">
                         <Dialog.Close asChild>
-                          <Button className="font-heading text-[0.65rem] font-bold tracking-[0.2em]">
+                          <Button className="min-h-11 w-full font-heading text-[0.65rem] font-bold tracking-[0.18em] sm:w-auto sm:tracking-[0.2em]">
                             CERRAR EXPEDIENTE
                           </Button>
                         </Dialog.Close>

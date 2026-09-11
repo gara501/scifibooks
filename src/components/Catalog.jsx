@@ -49,8 +49,8 @@ export default function Catalog() {
   }
 
   return (
-    <section id="catalogo" className="relative scroll-mt-24 py-24 md:py-32">
-      <div className="mx-auto max-w-7xl px-6">
+    <section id="catalogo" className="relative scroll-mt-20 py-16 md:scroll-mt-24 md:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* cabecera */}
         <motion.div
           initial={{ opacity: 0, y: 32 }}
@@ -63,7 +63,7 @@ export default function Catalog() {
             <p className="mb-3 text-[0.65rem] tracking-[0.35em] text-primary">
               // {String(filtered.length).padStart(3, '0')} REGISTROS ENCONTRADOS
             </p>
-            <h2 className="font-heading text-3xl font-extrabold tracking-tight md:text-5xl">
+            <h2 className="font-heading text-2xl font-extrabold tracking-tight sm:text-3xl md:text-5xl">
               CATÁLOGO <span className="text-primary text-glow">ORBITAL</span>
             </h2>
           </div>
@@ -82,7 +82,7 @@ export default function Catalog() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-10 flex flex-wrap items-center gap-3"
+          className="mb-8 grid gap-3 sm:mb-10 sm:flex sm:flex-wrap sm:items-center"
         >
           <span className="flex items-center gap-2 text-[0.6rem] tracking-[0.3em] text-muted-foreground">
             <Funnel className="size-3 text-primary/70" />
@@ -120,7 +120,7 @@ export default function Catalog() {
               initial="hidden"
               animate="show"
               exit="exit"
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4"
             >
               {pageBooks.map((book, i) => (
                 <BookCard key={book.code} book={book} index={i} onOpen={() => setActive(book)} />
@@ -135,20 +135,20 @@ export default function Catalog() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-12 flex items-center justify-between gap-4"
+            className="mt-10 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:mt-12 sm:gap-4"
           >
             <Button
               variant="outline"
               size="lg"
               onClick={() => goTo(safePage - 1)}
               disabled={safePage === 0}
-              className="h-11 gap-2 font-heading text-xs font-bold tracking-[0.2em] disabled:opacity-30"
+              className="h-11 min-w-11 justify-self-start gap-2 px-3 font-heading text-xs font-bold tracking-[0.2em] disabled:opacity-30 sm:px-5"
             >
               <ChevronLeft className="size-4" />
-              ANTERIOR
+              <span className="hidden sm:inline">ANTERIOR</span>
             </Button>
 
-            <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 sm:flex">
               {Array.from({ length: Math.min(pageCount, 7) }, (_, i) => {
                 let p
                 if (pageCount <= 7) p = i
@@ -173,14 +173,18 @@ export default function Catalog() {
               })}
             </div>
 
+            <span className="min-w-20 text-center text-[0.65rem] tracking-[0.18em] text-muted-foreground sm:hidden">
+              {String(safePage + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}
+            </span>
+
             <Button
               variant="outline"
               size="lg"
               onClick={() => goTo(safePage + 1)}
               disabled={safePage >= pageCount - 1}
-              className="h-11 gap-2 font-heading text-xs font-bold tracking-[0.2em] disabled:opacity-30"
+              className="h-11 min-w-11 justify-self-end gap-2 px-3 font-heading text-xs font-bold tracking-[0.2em] disabled:opacity-30 sm:px-5"
             >
-              SIGUIENTE
+              <span className="hidden sm:inline">SIGUIENTE</span>
               <ChevronRight className="size-4" />
             </Button>
           </motion.div>

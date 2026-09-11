@@ -34,8 +34,8 @@ const stats = [
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden pt-36 pb-20 md:pt-44 md:pb-28">
-      <div className="mx-auto grid max-w-7xl items-center gap-16 px-6 lg:grid-cols-[1.35fr_1fr]">
+    <section className="relative overflow-hidden pt-28 pb-16 md:pt-44 md:pb-28">
+      <div className="mx-auto grid max-w-7xl items-center gap-16 px-4 sm:px-6 lg:grid-cols-[1.35fr_1fr]">
         <motion.div variants={container} initial="hidden" animate="show">
           <motion.div variants={fade} className="mb-8 flex flex-wrap items-center gap-3">
             <Badge
@@ -50,7 +50,7 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          <h1 className="font-heading text-[clamp(2.4rem,7vw,5.5rem)] leading-[0.95] font-extrabold tracking-tight">
+          <h1 className="font-heading text-[clamp(2rem,10vw,5.5rem)] leading-[1.02] font-extrabold tracking-tight sm:leading-[0.95]">
             <span className="block overflow-hidden pb-1">
               <motion.span variants={reveal} className="block">
                 LA BIBLIOTECA
@@ -78,8 +78,8 @@ export default function Hero() {
             <span className="ml-2 inline-block h-4 w-2 translate-y-0.5 animate-blink bg-primary" />
           </motion.p>
 
-          <motion.div variants={fade} className="mt-10 flex flex-wrap items-center gap-4">
-            <Button asChild size="lg" className="h-12 px-7 font-heading text-xs font-bold tracking-[0.2em]">
+          <motion.div variants={fade} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
+            <Button asChild size="lg" className="h-12 w-full px-4 font-heading text-[0.68rem] font-bold tracking-[0.16em] sm:w-auto sm:px-7 sm:text-xs sm:tracking-[0.2em]">
               <a href="#catalogo">
                 <Rocket className="size-4" />
                 EXPLORAR CATÁLOGO
@@ -89,7 +89,7 @@ export default function Hero() {
               asChild
               variant="outline"
               size="lg"
-              className="h-12 px-7 font-heading text-xs font-bold tracking-[0.2em] hover:text-primary"
+              className="h-12 w-full px-4 font-heading text-[0.68rem] font-bold tracking-[0.16em] hover:text-primary sm:w-auto sm:px-7 sm:text-xs sm:tracking-[0.2em]"
             >
               <a href="#manifiesto">
                 <Radio className="size-4" />
@@ -154,17 +154,17 @@ export default function Hero() {
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto mt-20 grid max-w-7xl grid-cols-2 border-y border-primary/15 md:grid-cols-4"
+        className="mx-auto mt-14 grid max-w-7xl grid-cols-2 border-y border-primary/15 md:mt-20 md:grid-cols-4"
       >
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="flex flex-col border-primary/15 px-6 py-8 not-last:border-r max-md:nth-[2]:border-r-0 max-md:nth-[3]:border-t max-md:nth-[3]:border-r max-md:nth-[4]:border-t max-md:nth-[4]:border-r-0"
+            className="flex min-w-0 flex-col border-primary/15 px-4 py-6 not-last:border-r max-md:nth-[2]:border-r-0 max-md:nth-[3]:border-t max-md:nth-[3]:border-r max-md:nth-[4]:border-t max-md:nth-[4]:border-r-0 sm:px-6 sm:py-8"
           >
-            <dd className="order-1 font-heading text-3xl font-bold text-primary text-glow md:text-4xl">
+            <dd className="order-1 font-heading text-2xl font-bold text-primary text-glow sm:text-3xl md:text-4xl">
               {stat.value}
             </dd>
-            <dt className="order-2 mt-2 text-[0.6rem] tracking-[0.3em] text-muted-foreground">
+            <dt className="order-2 mt-2 break-words text-[0.55rem] tracking-[0.18em] text-muted-foreground sm:text-[0.6rem] sm:tracking-[0.3em]">
               {stat.label}
             </dt>
           </div>

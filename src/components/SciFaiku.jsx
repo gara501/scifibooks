@@ -39,13 +39,13 @@ export default function SciFaiku() {
   return (
     <section
       id="scifaiku"
-      className="relative scroll-mt-24 overflow-hidden border-t border-primary/15 py-24 md:py-32"
+      className="relative scroll-mt-20 overflow-hidden border-t border-primary/15 py-16 md:scroll-mt-24 md:py-32"
       aria-labelledby="scifaiku-title"
     >
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-35" />
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,7 +59,7 @@ export default function SciFaiku() {
               <RadioTower className="size-3.5" />
               // TRANSMISIONES BREVES DESDE EL FUTURO
             </p>
-            <h2 id="scifaiku-title" className="font-heading text-3xl font-extrabold tracking-tight md:text-5xl">
+            <h2 id="scifaiku-title" className="font-heading text-2xl font-extrabold tracking-tight sm:text-3xl md:text-5xl">
               SCIF<span className="text-primary text-glow">AIKU</span>
             </h2>
             </div>
@@ -90,7 +90,7 @@ export default function SciFaiku() {
           <span className="absolute bottom-0 right-0 h-8 w-px bg-primary" />
           <span className="absolute bottom-0 right-0 h-px w-8 bg-primary" />
 
-          <div className="grid min-h-[330px] place-items-center overflow-hidden px-8 py-16 text-center md:min-h-[410px] md:px-24">
+          <div className="grid min-h-[300px] place-items-center overflow-hidden px-5 py-12 text-center sm:px-8 sm:py-16 md:min-h-[410px] md:px-24">
             <AnimatePresence mode="wait" custom={direction}>
               <motion.blockquote
                 key={active}
@@ -105,7 +105,7 @@ export default function SciFaiku() {
                 {poems[active].map((line, index) => (
                   <span
                     key={line}
-                    className={`block font-heading text-xl leading-relaxed font-semibold tracking-tight md:text-3xl md:leading-relaxed ${index === 0 ? 'text-primary text-glow' : 'text-foreground'}`}
+                    className={`block break-words font-heading text-base leading-loose font-semibold tracking-tight sm:text-xl md:text-3xl md:leading-relaxed ${index === 0 ? 'text-primary text-glow' : 'text-foreground'}`}
                   >
                     {line}
                   </span>
@@ -114,17 +114,17 @@ export default function SciFaiku() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between border-t border-primary/15 px-4 py-3 md:px-6">
+          <div className="flex items-center justify-between gap-2 border-t border-primary/15 px-3 py-3 md:px-6">
             <button
               type="button"
               onClick={() => goTo(active - 1)}
-              className="grid size-10 place-items-center border border-primary/25 text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="grid size-11 shrink-0 place-items-center border border-primary/25 text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               aria-label="Scifaiku anterior"
             >
               <ChevronLeft className="size-4" />
             </button>
 
-            <div className="flex items-center gap-2" role="group" aria-label="Seleccionar scifaiku">
+            <div className="flex min-w-0 items-center gap-1.5 sm:gap-2" role="group" aria-label="Seleccionar scifaiku">
               {poems.map((poem, index) => (
                 <button
                   key={poem[0]}
@@ -140,7 +140,7 @@ export default function SciFaiku() {
             <button
               type="button"
               onClick={() => goTo(active + 1)}
-              className="grid size-10 place-items-center border border-primary/25 text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className="grid size-11 shrink-0 place-items-center border border-primary/25 text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
               aria-label="Scifaiku siguiente"
             >
               <ChevronRight className="size-4" />

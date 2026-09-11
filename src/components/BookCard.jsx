@@ -18,7 +18,7 @@ export default function BookCard({ book, index, onOpen }) {
       animate="show"
       exit="exit"
       transition={{ delay: (index % 4) * 0.06 }}
-      whileHover={{ y: -10 }}
+      whileHover={{ y: -6 }}
       className="group"
     >
       <button
@@ -29,7 +29,7 @@ export default function BookCard({ book, index, onOpen }) {
       >
         <Card className="gap-0 overflow-hidden border-primary/15 bg-card/70 py-0 transition-colors duration-300 group-hover:border-primary/50 group-hover:shadow-[0_0_50px_oklch(0.84_0.165_82/10%)]">
           {/* portada */}
-          <div className="relative aspect-[2/3] overflow-hidden">
+          <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[2/3]">
             <img
               src={book.cover}
               alt={`Ilustración de ${book.title}`}
@@ -38,14 +38,14 @@ export default function BookCard({ book, index, onOpen }) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/15 to-background/40" />
 
-            <span className="absolute top-4 left-4 border border-primary/30 bg-background/60 px-2 py-0.5 text-[0.6rem] tracking-[0.3em] text-primary backdrop-blur-sm">
+            <span className="absolute top-3 left-3 border border-primary/30 bg-background/70 px-2 py-0.5 text-[0.6rem] tracking-[0.25em] text-primary backdrop-blur-sm sm:top-4 sm:left-4">
               {book.code}
             </span>
-            <span className="absolute top-4 right-4 border border-foreground/15 bg-background/60 px-2 py-0.5 text-[0.6rem] tracking-[0.3em] text-foreground/70 backdrop-blur-sm">
+            <span className="absolute top-3 right-3 border border-foreground/15 bg-background/70 px-2 py-0.5 text-[0.6rem] tracking-[0.25em] text-foreground/70 backdrop-blur-sm sm:top-4 sm:right-4">
               {book.year}
             </span>
 
-            <div className="absolute inset-x-4 bottom-4">
+            <div className="absolute inset-x-4 bottom-4 sm:inset-x-4">
               <p className="font-heading text-sm leading-snug font-bold tracking-wide text-foreground uppercase">
                 {book.title}
               </p>
@@ -55,7 +55,7 @@ export default function BookCard({ book, index, onOpen }) {
             </div>
 
             {/* overlay hover */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-background/85 p-5 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+            <div className="absolute inset-0 hidden flex-col items-center justify-center gap-5 bg-background/85 p-5 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100 sm:flex">
               <p className="line-clamp-4 border-l-2 border-primary pl-3 text-xs leading-relaxed text-muted-foreground italic">
                 “{book.desc}”
               </p>
@@ -67,7 +67,7 @@ export default function BookCard({ book, index, onOpen }) {
           </div>
 
           {/* metadatos */}
-          <div className="space-y-3 p-4">
+          <div className="space-y-3 p-3 sm:p-4">
             <div className="flex items-center justify-between gap-2">
               <Badge
                 variant="outline"

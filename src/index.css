@@ -125,7 +125,16 @@
     @apply bg-background text-foreground;
     }
   html {
-    @apply font-sans;
+    @apply scroll-smooth font-sans;
+    }
+  body {
+    overflow-wrap: break-word;
+    }
+  button, a, [role="button"] {
+    -webkit-tap-highlight-color: transparent;
+    }
+  img {
+    @apply max-w-full;
     }
   ::selection {
     background: var(--phosphor);
