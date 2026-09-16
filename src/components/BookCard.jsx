@@ -75,10 +75,18 @@ export default function BookCard({ book, index, onOpen }) {
               >
                 {book.tag.split('/')[0].trim().toUpperCase()}
               </Badge>
-              <span className="flex items-center gap-1 text-[0.6rem] tracking-[0.2em] text-muted-foreground">
+              <span
+                className="flex items-center gap-1 text-[0.6rem] tracking-[0.2em] text-muted-foreground"
+                title={`${book.chars.length} personajes principales registrados`}
+                aria-label={`${book.chars.length} personajes principales registrados`}
+              >
                 <Users className="size-3 text-primary/60" />
                 {book.chars.length}
               </span>
+            </div>
+            <div className="flex min-h-11 items-center justify-center gap-2 border border-primary/30 bg-primary/5 px-3 font-heading text-[0.58rem] font-bold tracking-[0.18em] text-primary sm:hidden">
+              <BookOpen className="size-3.5" />
+              ABRIR EXPEDIENTE
             </div>
           </div>
         </Card>

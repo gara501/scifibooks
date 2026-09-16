@@ -4,12 +4,12 @@ import { Menu, Orbit, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 const links = [
-  { id: '01', label: 'NAVEGANTE', href: '/#navegante' },
-  { id: '02', label: 'MAPA', href: '/#mapa' },
-  { id: '03', label: 'SCIFAIKU', href: '/#scifaiku' },
-  { id: '04', label: 'TIEMPO', href: '/timetravel' },
-  { id: '05', label: 'CÁLCULO', href: '/calculus' },
-  { id: '06', label: 'INFLUENCIAS', href: '/influencias' },
+  { id: '01', label: 'NAVEGANTE', detail: 'Catálogo de libros', href: '/#navegante' },
+  { id: '02', label: 'MAPA', detail: 'Mapa de subgéneros', href: '/#mapa' },
+  { id: '03', label: 'SCIFAIKU', detail: 'Oráculo literario', href: '/#scifaiku' },
+  { id: '04', label: 'TIEMPO', detail: 'Cronología del género', href: '/timetravel' },
+  { id: '05', label: 'CÁLCULO', detail: 'Simuladores de física', href: '/calculus' },
+  { id: '06', label: 'INFLUENCIAS', detail: 'Red de obras y autores', href: '/influencias' },
 ]
 
 export default function Navbar() {
@@ -44,10 +44,12 @@ export default function Navbar() {
             <Link
               key={link.id}
               to={link.href}
-              className="group text-[0.65rem] tracking-[0.2em] text-muted-foreground transition-colors hover:text-primary xl:text-xs"
+              title={`${link.label}: ${link.detail}`}
+              aria-label={`${link.label}: ${link.detail}`}
+              className="group flex flex-col gap-0.5 text-[0.58rem] tracking-[0.16em] text-muted-foreground transition-colors hover:text-primary xl:text-[0.65rem]"
             >
-              <span className="mr-1.5 text-primary/60">[{link.id}]</span>
-              {link.label}
+              <span><span className="mr-1.5 text-primary/60">[{link.id}]</span>{link.label}</span>
+              <span className="pl-6 text-[0.45rem] tracking-[0.08em] text-muted-foreground/70 xl:text-[0.5rem]">{link.detail.toUpperCase()}</span>
             </Link>
           ))}
         </nav>
@@ -80,10 +82,13 @@ export default function Navbar() {
                   key={link.id}
                   to={link.href}
                   onClick={() => setOpen(false)}
-                  className="flex min-h-12 items-center border-b border-primary/10 text-xs tracking-[0.22em] text-foreground last:border-0"
+                  className="flex min-h-14 items-center border-b border-primary/10 text-xs tracking-[0.22em] text-foreground last:border-0"
                 >
                   <span className="mr-3 text-primary/70">[{link.id}]</span>
-                  {link.label}
+                  <span className="flex flex-col gap-1 py-2">
+                    <span>{link.label}</span>
+                    <span className="text-[0.55rem] tracking-[0.12em] text-muted-foreground">{link.detail.toUpperCase()}</span>
+                  </span>
                 </Link>
               ))}
             </div>

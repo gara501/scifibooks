@@ -19,7 +19,7 @@ function edgeWeight(source, target) {
 }
 
 export default function SciFiGraph() {
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState('raiz')
   const [hovered, setHovered] = useState(null)
 
   const focusId = hovered ?? selected
@@ -54,7 +54,7 @@ export default function SciFiGraph() {
               MAPA DE <span className="text-primary text-glow">SUBGÉNEROS</span>
             </h2>
           </div>
-          <p className="flex items-center gap-2 pb-2 text-[0.65rem] tracking-[0.25em] text-muted-foreground">
+          <p className="flex items-center gap-2 border border-primary/30 bg-primary/[0.06] px-3 py-2 text-[0.65rem] tracking-[0.2em] text-primary shadow-[0_0_24px_oklch(0.84_0.165_82/8%)]">
             <MousePointerClick className="size-3.5 text-primary/70" />
             SELECCIONA UN NODO PARA EXPLORAR
           </p>
@@ -161,6 +161,13 @@ export default function SciFiGraph() {
                       }
                     }}
                   >
+                    <circle
+                      cx={node.x}
+                      cy={node.y}
+                      r={Math.max(r + 12, 44)}
+                      fill="transparent"
+                      pointerEvents="all"
+                    />
                     {/* halo pulsante del nodo raíz */}
                     {node.size === 'root' && (
                       <motion.circle

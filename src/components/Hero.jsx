@@ -27,7 +27,7 @@ const logLines = [
 
 const stats = [
   { value: '100', label: 'VOLÚMENES' },
-  { value: '142', label: 'MUNDOS MAPEADOS' },
+  { value: '142', label: 'MUNDOS MAPEADOS', help: 'Escenarios, planetas, estaciones y realidades narrativas distintos presentes en los 100 volúmenes.' },
   { value: '09', label: 'SEÑALES ACTIVAS' },
   { value: '99.7%', label: 'INTEGRIDAD' },
 ]
@@ -159,6 +159,7 @@ export default function Hero() {
         {stats.map((stat) => (
           <div
             key={stat.label}
+            title={stat.help}
             className="flex min-w-0 flex-col border-primary/15 px-4 py-6 not-last:border-r max-md:nth-[2]:border-r-0 max-md:nth-[3]:border-t max-md:nth-[3]:border-r max-md:nth-[4]:border-t max-md:nth-[4]:border-r-0 sm:px-6 sm:py-8"
           >
             <dd className="order-1 font-heading text-2xl font-bold text-primary text-glow sm:text-3xl md:text-4xl">
@@ -167,6 +168,7 @@ export default function Hero() {
             <dt className="order-2 mt-2 break-words text-[0.55rem] tracking-[0.18em] text-muted-foreground sm:text-[0.6rem] sm:tracking-[0.3em]">
               {stat.label}
             </dt>
+            {stat.help ? <p className="order-3 mt-2 text-[0.52rem] leading-4 tracking-[0.05em] text-muted-foreground/75">DISTINTOS ESCENARIOS Y REALIDADES EN LOS 100 LIBROS</p> : null}
           </div>
         ))}
       </motion.dl>

@@ -10,7 +10,7 @@ const scenarioRules = [
 ]
 
 const hardSignals = /dura|hard sci-fi|astrofísica|cosmología|terraformación|ingenier|nanopunk|supervivencia espacial|artefacto alienígena/i
-const softSignals = /blanda|sociológica|antropológica|filosófica|poética|lingüística|satírica|utopía|distopía feminista|new wave/i
+const softSignals = /blanda|sociológica|antropológica|filosófica|poética|lingüística|sátira|utopía|distopía feminista|new wave/i
 
 export const scenarioOptions = [...scenarioRules.map(([name]) => name), 'TIERRA / OTRO']
 
@@ -24,4 +24,5 @@ export function getBookCoordinates(book) {
   return { scenario, hardness, genre }
 }
 
-export const genreOptions = (books) => [...new Set(books.map((book) => getBookCoordinates(book).genre))].sort()
+export const genreOptions = (books) => [...new Set(books.map((book) => getBookCoordinates(book).genre))]
+  .sort((a, b) => a.localeCompare(b, 'es'))

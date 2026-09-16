@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { MotionConfig } from 'motion/react'
 import Backdrop from '@/components/Backdrop'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
@@ -19,11 +20,12 @@ function RouteScrollManager() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       if (hash) {
         const target = document.getElementById(decodeURIComponent(hash.slice(1)))
         if (target) {
           const targetTop = target.getBoundingClientRect().top + window.scrollY - 64
-          window.scrollTo({ top: targetTop, behavior: 'smooth' })
+          window.scrollTo({ top: targetTop, behavior: reduceMotion ? 'instant' : 'smooth' })
           return
         }
       }
@@ -58,7 +60,7 @@ function Home() {
 
 function App() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <Soundscape />
       <RouteScrollManager />
       <Routes>
@@ -69,7 +71,7 @@ function App() {
         <Route path="/navegante" element={<Navigate to="/#navegante" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </MotionConfig>
   )
 }
 

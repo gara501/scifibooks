@@ -9,9 +9,10 @@ const STORAGE_KEY = 'scifiuniverse-audio-muted'
 
 function storedMutePreference() {
   try {
-    return window.localStorage.getItem(STORAGE_KEY) === 'true'
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    return stored === null ? true : stored === 'true'
   } catch {
-    return false
+    return true
   }
 }
 
