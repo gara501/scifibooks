@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { BookOpen, Users } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
+import { updateReadingLog, useReadingLog } from '@/lib/readingLog'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 48 },
@@ -10,6 +11,9 @@ const cardVariants = {
 }
 
 export default function BookCard({ book, index, onOpen }) {
+  const log = useReadingLog()
+  const status = log.books[book.code]?.status || ''
+  const favorite = log.books[book.code]?.favorite || false
   return (
     <motion.article
       layout
@@ -91,6 +95,13 @@ export default function BookCard({ book, index, onOpen }) {
           </div>
         </Card>
       </button>
+      <div className="flex items-center gap-2 border-x border-b border-primary/15 bg-card/70 px-3 py-2">
+        <label className="sr-only" htmlFor={`status-${book.code}`}>Estado de lectura de {book.title}</label>
+        <select id={`status-${book.code}`} value={status} onChange={(event) => updateReadingLog(book.code, { status: event.target.value })} className="min-h-9 min-w-0 flex-1 border border-primary/25 bg-background px-2 text-[0.62rem] tracking-[0.08em] text-muted-foreground focus-visible:outline-2 focus-visible:outline-primary">
+          <option value="">Sin estado</option><option value="read">Leído</option><option value="reading">Leyendo</option><option value="pending">Pendiente</option>
+        </select>
+        <button type="button" aria-label={favorite ? `Quitar ${book.title} de favoritos` : `Marcar ${book.title} como favorito`} aria-pressed={favorite} onClick={() => updateReadingLog(book.code, { favorite: !favorite })} className="grid min-h-9 min-w-9 place-items-center border border-primary/25 text-lg leading-none text-primary hover:bg-primary/10">{favorite ? '★' : '☆'}</button>
+      </div>
     </motion.article>
   )
 }

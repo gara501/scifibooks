@@ -10,6 +10,8 @@ const links = [
   { id: '04', label: 'TIEMPO', detail: 'Cronología del género', href: '/timetravel' },
   { id: '05', label: 'CÁLCULO', detail: 'Simuladores de física', href: '/calculus' },
   { id: '06', label: 'INFLUENCIAS', detail: 'Red de obras y autores', href: '/influencias' },
+  { id: '07', label: 'DIARIO', detail: 'Transmisión del día', href: '/diario' },
+  { id: '08', label: 'BITÁCORA', detail: 'Tu registro de lectura', href: '/bitacora' },
 ]
 
 export default function Navbar() {
