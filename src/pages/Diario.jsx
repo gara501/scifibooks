@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CalendarClock, Radio, Share2, Signal, Trophy } from 'lucide-react'
+import { FacebookIcon, FacebookShareButton, TelegramIcon, TelegramShareButton, WhatsappIcon, WhatsappShareButton, XIcon, XShareButton } from 'react-share'
 import Navbar from '@/components/Navbar'
 import Backdrop from '@/components/Backdrop'
 import Footer from '@/components/Footer'
@@ -13,6 +14,7 @@ const dateDiff = (a, b) => Math.floor((Date.parse(`${b}T00:00:00Z`) - Date.parse
 export default function Diario() {
   const today = todayInBogota()
   const [date, setDate] = useState(today)
+  const [practiceBook, setPracticeBook] = useState(null)
   const [game, setGame] = useState(() => getDailyGames().games[today] || EMPTY_GAME)
   const [input, setInput] = useState('')
   const [message, setMessage] = useState('')
@@ -21,12 +23,17 @@ export default function Diario() {
   const [shareNotice, setShareNotice] = useState('')
   const statsDialog = useRef(null)
   const archive = date < today
-  const transmission = getTransmission(date)
+  const dailyTransmission = getTransmission(date)
+  const transmission = practiceBook ? { book: practiceBook, number: null } : dailyTransmission
   const answer = transmission?.book
   const hints = useMemo(() => answer ? dailyHints(answer) : [], [answer])
   const misses = game.guesses.filter((guess) => !guess.correct).length
   const visibleHints = Math.min(misses + 1, hints.length)
   const finished = game.complete
+  const shareSquares = Array.from({ length: 6 }, (_, index) => game.guesses[index] ? (game.guesses[index].correct ? '🟩' : '🟥') : '⬛').join('')
+  const shareScore = game.won ? `${game.guesses.length}/6` : 'X/6'
+  const shareText = `${practiceBook ? 'SCIFIUNIVERSE · Práctica aleatoria' : `SCIFIUNIVERSE · Transmisión #${transmission?.number}`}\n🛰️ ${shareScore}\n${shareSquares}`
+  const shareUrl = 'https://scifibooks.netlify.app/diario'
 
   useEffect(() => {
     if (date !== today) return
@@ -43,8 +50,28 @@ export default function Diario() {
   }, [date, today])
 
   const selectDate = (next) => {
+    setPracticeBook(null)
     setDate(next)
     setGame(next === today ? (getDailyGames().games[next] || EMPTY_GAME) : EMPTY_GAME)
+    setInput('')
+    setMessage('')
+  }
+
+  const startPractice = () => {
+    const candidates = books.filter((book) => book.code !== answer?.code)
+    if (!candidates.length) return
+    setPracticeBook(candidates[Math.floor(Math.random() * candidates.length)])
+    setDate(today)
+    setGame(EMPTY_GAME)
+    setInput('')
+    setMessage('')
+    setShareNotice('')
+  }
+
+  const returnToDaily = () => {
+    setPracticeBook(null)
+    setDate(today)
+    setGame(getDailyGames().games[today] || EMPTY_GAME)
     setInput('')
     setMessage('')
   }
@@ -62,7 +89,7 @@ export default function Diario() {
     setGame(nextGame)
     setInput('')
     setMessage(correct ? 'Señal descifrada.' : guesses.length === 6 ? 'Se agotaron los intentos. Expediente desbloqueado.' : 'No coincide. Nueva pista recibida.')
-    if (!archive) {
+    if (!archive && !practiceBook) {
       saveDailyGame(date, nextGame)
       setStats(getDailyStats())
     }
@@ -70,11 +97,9 @@ export default function Diario() {
 
   const shareResult = async () => {
     if (!transmission) return
-    const squares = Array.from({ length: 6 }, (_, index) => game.guesses[index] ? (game.guesses[index].correct ? '🟩' : '🟥') : '⬛').join('')
-    const score = game.won ? `${game.guesses.length}/6` : 'X/6'
-    const text = `SCIFIUNIVERSE · Transmisión #${transmission.number}\n🛰️ ${score}\n${squares}\nscifibooks.netlify.app/diario`
+    const text = `${shareText}\n${shareUrl}`
     try {
-      if (navigator.share) await navigator.share({ title: 'Descifra la transmisión', text })
+      if (navigator.share) await navigator.share({ title: 'Descifra la transmisión', text, url: shareUrl })
       else {
         await navigator.clipboard.writeText(text)
         setShareNotice('Resultado copiado al portapapeles.')
@@ -93,8 +118,8 @@ export default function Diario() {
     })
   }, [today])
 
-  return <div className="relative min-h-screen overflow-x-clip bg-background text-foreground"><Backdrop /><Navbar /><main className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-24 sm:px-6 sm:pt-28"><header className="border-b border-primary/20 pb-7"><p className="flex items-center gap-2 text-[0.62rem] tracking-[0.28em] text-primary"><Radio size={15} /> // ENLACE DE DESCIFRADO · ESTACIÓN K-7</p><h1 className="mt-3 font-heading text-3xl font-black sm:text-5xl">DESCIFRA LA TRANSMISIÓN</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Una señal literaria nueva cada día. Lee la pista inicial y prueba hasta seis títulos; cada error revela otra pista.</p></header>
-    <section className="mt-6 flex flex-wrap items-end justify-between gap-4 border border-primary/25 bg-card/50 p-4 sm:p-5"><div><label htmlFor="archive-date" className="flex items-center gap-2 text-[0.6rem] tracking-[0.18em] text-muted-foreground"><CalendarClock size={14} /> FECHA DE TRANSMISIÓN</label><select id="archive-date" value={date} onChange={(event) => selectDate(event.target.value)} className="mt-2 min-h-11 w-full min-w-56 border border-primary/30 bg-background px-3 text-xs text-foreground">{archiveRange.map((day) => <option key={day} value={day}>{day === today ? `${day} · EN VIVO` : day}</option>)}</select></div><div className="text-right"><p className="text-[0.58rem] tracking-[0.2em] text-primary">TRANSMISIÓN N.º</p><p className="mt-1 font-heading text-2xl font-bold">{transmission ? String(transmission.number).padStart(3, '0') : '—'}</p></div>{archive && <p className="w-full border-l-2 border-signal px-3 py-2 text-xs text-signal">MODO ARCHIVO · Esta partida no modifica tu racha ni tus estadísticas.</p>}</section>
+  return <div className="relative min-h-screen overflow-x-clip bg-background text-foreground"><Backdrop /><Navbar /><main className="relative z-10 mx-auto max-w-5xl px-4 pb-16 pt-24 sm:px-6 sm:pt-28"><header className="border-b border-primary/20 pb-7"><p className="flex items-center gap-2 text-[0.62rem] tracking-[0.28em] text-primary"><Radio size={15} /> // ENLACE DE DESCIFRADO · ESTACIÓN K-7</p><h1 className="mt-3 font-heading text-3xl font-black sm:text-5xl">DESCIFRA LA TRANSMISIÓN</h1><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">El reto diario usa la misma señal para todos y cuenta para la racha. Al resolverla puedes practicar con señales aleatorias sin afectar tus estadísticas.</p></header>
+    <section className="mt-6 flex flex-wrap items-end justify-between gap-4 border border-primary/25 bg-card/50 p-4 sm:p-5">{practiceBook ? <div><p className="flex items-center gap-2 text-[0.6rem] tracking-[0.18em] text-signal"><Radio size={14} /> MODO PRÁCTICA</p><p className="mt-2 text-xs text-muted-foreground">Señal aleatoria · no afecta racha ni estadísticas</p></div> : <div><label htmlFor="archive-date" className="flex items-center gap-2 text-[0.6rem] tracking-[0.18em] text-muted-foreground"><CalendarClock size={14} /> FECHA DE TRANSMISIÓN</label><select id="archive-date" value={date} onChange={(event) => selectDate(event.target.value)} className="mt-2 min-h-11 w-full min-w-56 border border-primary/30 bg-background px-3 text-xs text-foreground">{archiveRange.map((day) => <option key={day} value={day}>{day === today ? `${day} · EN VIVO` : day}</option>)}</select></div>}<div className="text-right"><p className="text-[0.58rem] tracking-[0.2em] text-primary">{practiceBook ? 'SEÑAL' : 'TRANSMISIÓN N.º'}</p><p className="mt-1 font-heading text-2xl font-bold">{practiceBook ? '∞' : transmission ? String(transmission.number).padStart(3, '0') : '—'}</p></div>{practiceBook && <button type="button" onClick={returnToDaily} className="min-h-11 border border-primary/30 px-4 text-xs text-primary hover:bg-primary/10">VOLVER A LA DIARIA</button>}{archive && <p className="w-full border-l-2 border-signal px-3 py-2 text-xs text-signal">MODO ARCHIVO · Esta partida no modifica tu racha ni tus estadísticas.</p>}</section>
     {!answer ? <section className="mt-6 border border-primary/25 bg-card/50 p-6 text-sm text-muted-foreground">Esta fecha es anterior al inicio de transmisiones configurado.</section> : <>
       <section className="mt-6 grid gap-5 border border-primary/25 bg-card/50 p-5 sm:p-7"><div className="flex items-center justify-between gap-3"><h2 className="font-heading text-sm font-bold tracking-[0.16em]">SEÑAL INTERCEPTADA</h2><span className="flex items-center gap-2 text-[0.58rem] tracking-[0.16em] text-signal"><Signal size={13} /> {finished ? 'DESCIFRADA' : 'CIFRADO ACTIVO'}</span></div>
         <ol aria-label="Intentos realizados" className="grid grid-cols-6 gap-2">{Array.from({ length: 6 }, (_, index) => <li key={index} className={`grid aspect-square place-items-center border text-sm sm:text-base ${game.guesses[index] ? game.guesses[index].correct ? 'border-signal/60 bg-signal/15 text-signal' : 'border-red-400/40 bg-red-500/10 text-red-200' : 'border-primary/20 bg-background/50 text-muted-foreground'}`} aria-label={game.guesses[index] ? `${game.guesses[index].title}: ${game.guesses[index].correct ? 'correcto' : 'incorrecto'}` : `Intento ${index + 1} disponible`}>{game.guesses[index] ? game.guesses[index].correct ? '✓' : '×' : index + 1}</li>)}</ol>
@@ -102,7 +127,7 @@ export default function Diario() {
         {message && <p role="status" className="text-sm text-signal">{message}</p>}
         <div className="border-t border-primary/15 pt-4"><h3 className="text-[0.6rem] tracking-[0.22em] text-primary">PISTAS RECIBIDAS · {visibleHints}/{hints.length}</h3><ol className="mt-3 space-y-2">{hints.slice(0, visibleHints).map((hint, index) => <li key={index} className="flex gap-3 border-l border-primary/30 bg-background/30 px-3 py-2 text-xs leading-5"><span className="shrink-0 text-primary">0{index + 1}</span><span>{hint}</span></li>)}</ol></div>
       </section>
-      {finished && <section className="mt-6 border border-signal/35 bg-signal/[0.04] p-5 sm:p-7"><p className="text-[0.6rem] tracking-[0.2em] text-signal">{game.won ? 'TRANSMISIÓN DESCIFRADA' : 'EXPEDIENTE DESCLASIFICADO'}</p><h2 className="mt-2 font-heading text-2xl font-black">{answer.title}</h2><p className="mt-2 text-xs text-muted-foreground">{answer.author} · {answer.year} · {answer.tag}</p><p className="mt-4 max-w-3xl text-sm leading-6 text-muted-foreground">{answer.desc}</p><div className="mt-5 flex flex-wrap gap-3"><Link to={`/libro/${answer.slug}`} className="inline-flex min-h-11 items-center border border-primary/40 px-4 text-xs tracking-[0.12em] text-primary">ABRIR EXPEDIENTE</Link><button type="button" onClick={shareResult} className="inline-flex min-h-11 items-center gap-2 border border-signal/40 px-4 text-xs tracking-[0.12em] text-signal"><Share2 size={14} /> COMPARTIR RESULTADO</button>{shareNotice && <span role="status" className="self-center text-xs text-signal">{shareNotice}</span>}</div><p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground"><CalendarClock size={14} /> {archive ? 'Modo archivo · sin efecto en racha' : `Próxima transmisión en ${countdown || '…'}`}</p></section>}
+      {finished && <section className="mt-6 border border-signal/35 bg-signal/[0.04] p-5 sm:p-7"><p className="text-[0.6rem] tracking-[0.2em] text-signal">{game.won ? 'TRANSMISIÓN DESCIFRADA' : 'EXPEDIENTE DESCLASIFICADO'}</p><h2 className="mt-2 font-heading text-2xl font-black">{answer.title}</h2><p className="mt-2 text-xs text-muted-foreground">{answer.author} · {answer.year} · {answer.tag}</p><p className="mt-4 max-w-3xl text-sm leading-6 text-muted-foreground">{answer.desc}</p><div className="mt-5 flex flex-wrap gap-3"><Link to={`/libro/${answer.slug}`} className="inline-flex min-h-11 items-center border border-primary/40 px-4 text-xs tracking-[0.12em] text-primary">ABRIR EXPEDIENTE</Link><button type="button" onClick={shareResult} className="inline-flex min-h-11 items-center gap-2 border border-signal/40 px-4 text-xs tracking-[0.12em] text-signal"><Share2 size={14} /> MÁS OPCIONES</button><XShareButton url={shareUrl} title={shareText} hashtags={['SCIFIUNIVERSE']} aria-label="Compartir resultado en X" className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-3 text-xs text-primary"><XIcon size={18} /> X</XShareButton><FacebookShareButton url={shareUrl} hashtag="#SCIFIUNIVERSE" aria-label="Compartir SCIFIUNIVERSE en Facebook" className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-3 text-xs text-primary"><FacebookIcon size={18} /> Facebook</FacebookShareButton><WhatsappShareButton url={shareUrl} title={shareText} separator="\n" aria-label="Compartir resultado en WhatsApp" className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-3 text-xs text-primary"><WhatsappIcon size={18} /> WhatsApp</WhatsappShareButton><TelegramShareButton url={shareUrl} title={shareText} aria-label="Compartir resultado en Telegram" className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-3 text-xs text-primary"><TelegramIcon size={18} /> Telegram</TelegramShareButton>{(practiceBook || archive) && <button type="button" onClick={startPractice} className="inline-flex min-h-11 items-center gap-2 border border-primary/40 px-4 text-xs tracking-[0.12em] text-primary"><Radio size={14} /> OTRA SEÑAL ALEATORIA</button>}{!practiceBook && !archive && <button type="button" onClick={startPractice} className="inline-flex min-h-11 items-center gap-2 border border-primary/40 px-4 text-xs tracking-[0.12em] text-primary"><Radio size={14} /> PROBAR MODO PRÁCTICA</button>}{shareNotice && <span role="status" className="self-center text-xs text-signal">{shareNotice}</span>}</div><p className="mt-5 flex items-center gap-2 text-xs text-muted-foreground"><CalendarClock size={14} /> {practiceBook ? 'Práctica libre · sin efecto en racha' : archive ? 'Modo archivo · sin efecto en racha' : `Próxima transmisión en ${countdown || '…'}`}</p></section>}
     </>}
     <section className="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-primary/15 pt-5"><p className="text-xs text-muted-foreground">{stats.played} partidas diarias registradas · racha actual {stats.currentStreak}</p><button type="button" onClick={openStats} className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-4 text-xs text-primary"><Trophy size={14} /> ESTADÍSTICAS</button></section>
   </main><Footer /><dialog ref={statsDialog} aria-labelledby="daily-stats-title" className="m-auto w-[calc(100%-2rem)] max-w-lg border border-primary/35 bg-background p-0 text-foreground backdrop:bg-black/75"><div className="flex items-center justify-between border-b border-primary/20 p-5"><h2 id="daily-stats-title" className="font-heading text-lg font-bold">REGISTRO DE TRANSMISIONES</h2><button type="button" onClick={() => statsDialog.current?.close()} aria-label="Cerrar estadísticas" className="grid size-11 place-items-center border border-primary/25 text-primary">×</button></div><div className="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4">{[['JUGADAS', stats.played], ['VICTORIAS', stats.winRate + '%'], ['RACHA ACTUAL', stats.currentStreak], ['RACHA MÁXIMA', stats.maxStreak]].map(([label, value]) => <div key={label} className="border border-primary/20 p-3 text-center"><p className="text-[0.53rem] tracking-[0.1em] text-muted-foreground">{label}</p><p className="mt-2 font-heading text-xl text-primary">{value}</p></div>)}</div><div className="px-5 pb-6"><p className="text-[0.58rem] tracking-[0.18em] text-primary">DISTRIBUCIÓN DE INTENTOS GANADORES</p><div className="mt-3 space-y-2">{stats.distribution.map((count, index) => <div key={index} className="grid grid-cols-[2rem_1fr_2rem] items-center gap-2 text-xs"><span>{index + 1}/6</span><div className="h-5 bg-primary/10"><div className="grid h-full min-w-7 place-items-center bg-primary/70 text-background" style={{ width: `${Math.max(count ? 10 : 0, stats.wins ? count / stats.wins * 100 : 0)}%` }}>{count}</div></div><span className="text-right">{count}</span></div>)}</div></div></dialog></div>
