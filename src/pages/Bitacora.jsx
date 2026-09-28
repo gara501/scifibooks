@@ -1,11 +1,11 @@
-import { useMemo, useRef, useState } from 'react'
-import { Download, FileUp, Orbit, Share2, Star } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Download, Orbit, Share2, Star } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Backdrop from '@/components/Backdrop'
 import Footer from '@/components/Footer'
 import { books } from '@/data/books'
 import challenges from '@/data/challenges.json'
-import { getReadingLog, replaceReadingLog, useReadingLog } from '@/lib/readingLog'
+import { getReadingLog, useReadingLog } from '@/lib/readingLog'
 
 const statusLabels = { read: 'LEÍDO', reading: 'LEYENDO', pending: 'PENDIENTE' }
 
@@ -37,7 +37,6 @@ async function makeCrewCard({ rank, read, genre, favorites }) {
 export default function Bitacora() {
   const log = useReadingLog()
   const [notice, setNotice] = useState('')
-  const fileRef = useRef(null)
   const records = books.map((book) => ({ book, ...(log.books[book.code] || {}) }))
   const readBooks = records.filter((item) => item.status === 'read')
   const favorites = records.filter((item) => item.favorite).map((item) => item.book).slice(0, 3)
@@ -66,18 +65,6 @@ export default function Bitacora() {
     URL.revokeObjectURL(url)
   }
 
-  const importLog = async (event) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    try {
-      replaceReadingLog(JSON.parse(await file.text()))
-      setNotice('Bitácora importada.')
-    } catch (error) {
-      setNotice(error.message || 'No se pudo importar el archivo.')
-    }
-    event.target.value = ''
-  }
-
   const shareCrewCard = async () => {
     try {
       const blob = await makeCrewCard({ rank, read: readBooks.length, genre: dominantGenre, favorites })
@@ -103,6 +90,6 @@ export default function Bitacora() {
     <section className="mt-10 grid gap-6 lg:grid-cols-3">{Object.entries(statusLabels).map(([status, label]) => <div key={status}><h2 className="border-b border-primary/20 pb-3 font-heading text-sm font-bold tracking-[0.12em]">{label} <span className="text-primary">({records.filter((item) => item.status === status).length})</span></h2><ul className="mt-3 space-y-2">{records.filter((item) => item.status === status).map(({ book }) => <li key={book.code}><a href={`/libro/${book.slug}`} className="block border border-primary/15 bg-card/40 p-3 hover:border-primary/45"><span className="text-[0.55rem] tracking-[0.14em] text-primary">{book.code} · {book.year}</span><span className="mt-1 block text-sm">{book.title}</span></a></li>)}{!records.some((item) => item.status === status) && <li className="py-3 text-xs text-muted-foreground">Sin volúmenes en esta lista.</li>}</ul></div>)}</section>
     <section className="mt-10"><h2 className="font-heading text-xl font-bold">RETOS DE EXPLORACIÓN</h2><div className="mt-4 grid gap-3 sm:grid-cols-2">{challengeRows.map((challenge) => <article key={challenge.id} className="border border-primary/20 bg-card/50 p-4"><div className="flex items-start justify-between gap-3"><div><h3 className="font-heading text-sm font-bold">{challenge.title}</h3><p className="mt-2 text-xs leading-5 text-muted-foreground">{challenge.description}</p></div>{challenge.done && <span aria-label="Insignia obtenida" className="shrink-0 border border-signal/40 bg-signal/10 px-2 py-1 text-[0.52rem] tracking-[0.08em] text-signal">✦ INSIGNIA</span>}</div><div className="mt-4 flex items-center gap-3"><div className="h-2 flex-1 bg-primary/10"><div className="h-full bg-signal" style={{ width: `${Math.min(100, challenge.target ? challenge.count / challenge.target * 100 : 0)}%` }} /></div><span className="min-w-12 text-right text-xs text-primary">{challenge.count}/{challenge.target}</span></div></article>)}</div></section>
     <section className="mt-10 border border-primary/25 bg-card/50 p-5 sm:p-7"><p className="flex items-center gap-2 text-[0.6rem] tracking-[0.25em] text-primary"><Star size={14} /> CARNET DE TRIPULANTE</p><p className="mt-3 text-sm text-muted-foreground">Rango {rank} · {readBooks.length}/100 leídos · {dominantGenre || 'sin subgénero dominante'}.</p><p className="mt-3 text-xs text-muted-foreground">Favoritos: {favorites.length ? favorites.map((book) => book.title).join(' · ') : 'todavía sin favoritos'}</p><button type="button" onClick={shareCrewCard} className="mt-5 inline-flex min-h-11 items-center gap-2 border border-primary/40 px-4 text-xs tracking-[0.12em] text-primary hover:bg-primary/10"><Share2 size={15} /> DESCARGAR / COMPARTIR CARNET</button></section>
-    <section className="mt-10 flex flex-wrap gap-3 border-t border-primary/15 pt-6"><button type="button" onClick={exportLog} className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-4 text-xs text-primary"><Download size={15} /> EXPORTAR BITÁCORA</button><button type="button" onClick={() => fileRef.current?.click()} className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-4 text-xs text-primary"><FileUp size={15} /> IMPORTAR JSON</button><input ref={fileRef} type="file" accept="application/json,.json" onChange={importLog} className="sr-only" />{notice && <p role="status" className="self-center text-xs text-signal">{notice}</p>}</section>
+    <section className="mt-10 flex flex-wrap gap-3 border-t border-primary/15 pt-6"><button type="button" onClick={exportLog} className="inline-flex min-h-11 items-center gap-2 border border-primary/30 px-4 text-xs text-primary"><Download size={15} /> EXPORTAR BITÁCORA</button>{notice && <p role="status" className="self-center text-xs text-signal">{notice}</p>}</section>
   </main><Footer /></div>
 }

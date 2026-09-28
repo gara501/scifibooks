@@ -30,20 +30,6 @@ export function updateReadingLog(code, patch) {
   return next
 }
 
-export function replaceReadingLog(value) {
-  const books = value?.version === 1 && value.books && typeof value.books === 'object' ? value.books : null
-  if (!books || Object.values(books).some((record) => !record || !['', 'read', 'reading', 'pending'].includes(record.status || '') || typeof (record.favorite || false) !== 'boolean')) {
-    throw new Error('El archivo no tiene un formato de bitácora SCIFIUNIVERSE válido.')
-  }
-  memoryLog = { books }
-  try {
-    window.localStorage.setItem(KEY, JSON.stringify({ version: 1, books }))
-  } catch {
-    // La importación actual sigue disponible en memoria.
-  }
-  window.dispatchEvent(new CustomEvent(EVENT, { detail: memoryLog }))
-}
-
 export function useReadingLog() {
   const [log, setLog] = useState(() => getReadingLog())
   useEffect(() => {

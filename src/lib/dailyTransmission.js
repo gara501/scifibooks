@@ -110,5 +110,5 @@ export function dailyHints(book) {
     }
     return result
   }
-  return [book.tag, decade, String(book.year), book.chars[0], censor(), book.author]
+  return [censor(), book.tag, decade, String(book.year), book.chars[0], book.author]
 }
