@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { Rocket, Radio, SatelliteDish } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Link } from 'react-router-dom'
 
 const container = {
   hidden: {},
@@ -79,6 +80,9 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={fade} className="mt-10 grid gap-3 sm:flex sm:flex-wrap sm:items-center sm:gap-4">
+            <Link to="/diario" className="inline-flex h-12 w-full items-center justify-center gap-2 border border-signal/50 bg-signal/10 px-4 font-heading text-[0.68rem] font-bold tracking-[0.12em] text-signal shadow-[0_0_24px_oklch(0.78_0.14_190/12%)] transition-colors hover:bg-signal hover:text-background sm:w-auto sm:px-5">
+              <Radio className="size-4" /> 07 · DIARIO · TRANSMISIÓN DEL DÍA
+            </Link>
             <Button asChild size="lg" className="h-12 w-full px-4 font-heading text-[0.68rem] font-bold tracking-[0.16em] sm:w-auto sm:px-7 sm:text-xs sm:tracking-[0.2em]">
               <a href="#navegante">
                 <Rocket className="size-4" />

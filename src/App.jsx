@@ -17,6 +17,7 @@ const Influences = lazy(() => import('@/pages/Influences'))
 const BookPage = lazy(() => import('@/pages/BookPage'))
 const BookRouteModal = lazy(() => import('@/pages/BookPage').then((module) => ({ default: module.BookRouteModal })))
 const Bitacora = lazy(() => import('@/pages/Bitacora'))
+const Diario = lazy(() => import('@/pages/Diario'))
 
 const routeMeta = {
   '/': ['SCIFIUNIVERSE — Archivo Estelar', 'Archivo orbital de ciencia ficción: explora 100 volúmenes y sus universos.'],
@@ -115,6 +116,7 @@ function App() {
         <Route path="/influencias" element={<Suspense fallback={null}><Influences /></Suspense>} />
         <Route path="/libro/:slug" element={<Suspense fallback={null}><BookPage /></Suspense>} />
         <Route path="/bitacora" element={<Suspense fallback={null}><Bitacora /></Suspense>} />
+        <Route path="/diario" element={<Suspense fallback={null}><Diario /></Suspense>} />
         <Route path="/navegante" element={<Navigate to="/#navegante" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
