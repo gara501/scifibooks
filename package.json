@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "validate:data": "node scripts/validate-data.mjs",
     "generate:covers": "node scripts/generate-covers.mjs && node scripts/generate-unique-covers.mjs"
   },
   "dependencies": {
