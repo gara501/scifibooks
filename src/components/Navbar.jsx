@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Menu, Orbit, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useVisitStreak } from '@/lib/visitStreak'
 
 const links = [
   { id: '01', label: 'NAVEGANTE', detail: 'Catálogo de libros', href: '/#navegante' },
@@ -16,6 +17,7 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const visit = useVisitStreak()
 
   useEffect(() => {
     if (!open) return undefined
@@ -39,8 +41,10 @@ export default function Navbar() {
           <span className="font-heading text-xs font-bold tracking-[0.24em] text-foreground sm:text-sm sm:tracking-[0.3em]">
             SCIFI<span className="text-primary text-glow">UNIVERSE</span>
           </span>
+          {visit.streak > 0 && <span className="text-[0.5rem] tracking-[0.08em] text-primary sm:hidden">{visit.streak}D</span>}
         </Link>
 
+        {visit.streak > 0 && <span className="hidden border border-primary/20 px-2 py-1 text-[0.52rem] tracking-[0.08em] text-primary xl:block" aria-label={`Racha de ${visit.streak} días de visita`}>✦ {visit.streak} DÍAS</span>}
         <nav className="hidden items-center gap-3 lg:flex xl:gap-5">
           {links.map((link) => (
             <Link

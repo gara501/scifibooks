@@ -9,6 +9,8 @@ import SciFiGraph from '@/components/SciFiGraph'
 import SciFaiku from '@/components/SciFaiku'
 import Manifesto from '@/components/Manifesto'
 import Footer from '@/components/Footer'
+import HomeTransmission from '@/components/HomeTransmission'
+import InstallPrompt from '@/components/InstallPrompt'
 import Soundscape from '@/components/Soundscape'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 const TimeTravel = lazy(() => import('@/pages/TimeTravel'))
@@ -88,6 +90,7 @@ function Home() {
       <Navbar />
       <main className="relative z-10">
         <Hero />
+        <HomeTransmission />
         <Marquee />
         <Navigator />
         <SciFiGraph />
@@ -108,6 +111,7 @@ function App() {
     <MotionConfig reducedMotion="user">
       <Soundscape />
       <RouteMetadata />
+      <InstallPrompt />
       <RouteScrollManager />
       <Routes location={backgroundLocation || location}>
         <Route path="/" element={<Home />} />

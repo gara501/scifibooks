@@ -37,6 +37,12 @@ export function todayInBogota() {
   return dateInBogota()
 }
 
+export function getHomeTransmission(dateKey) {
+  const day = Math.floor((Date.parse(`${dateKey}T00:00:00Z`) - Date.parse(`${LAUNCH_DATE}T00:00:00Z`)) / 86400000)
+  if (!Number.isFinite(day) || day < 0) return null
+  return { book: dailyOrder[(day + 37) % dailyOrder.length], day }
+}
+
 export function nextTransmissionAt(now = new Date()) {
   const today = dateInBogota(now)
   const [year, month, day] = today.split('-').map(Number)
@@ -57,9 +63,11 @@ export function saveDailyGame(dateKey, game) {
   memory = { games: { ...getDailyGames().games, [dateKey]: game } }
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, ...memory }))
+    window.localStorage.setItem('scifi:v1:diario-jugado', '1')
   } catch {
     // El juego permanece operativo durante esta sesión.
   }
+  window.dispatchEvent(new Event('scifi:daily-played'))
   return memory
 }
 
@@ -69,8 +77,9 @@ export function getDailyStats() {
   const dates = new Set(wins.map(([date]) => date))
   const today = todayInBogota()
   let currentStreak = 0
-  let cursor = Date.parse(`${today}T00:00:00Z`) - (dates.has(today) ? 0 : 86400000)
-  while (dates.has(new Date(cursor).toISOString().slice(0, 10))) {
+  const resultToday = finished.find(([date]) => date === today)?.[1]
+  let cursor = resultToday && !resultToday.won ? null : Date.parse(`${today}T00:00:00Z`) - (dates.has(today) ? 0 : 86400000)
+  while (cursor !== null && dates.has(new Date(cursor).toISOString().slice(0, 10))) {
     currentStreak += 1
     cursor -= 86400000
   }

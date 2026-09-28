@@ -25,11 +25,16 @@ function htmlPage({ title, description, url, image = '/og/site.png', body = '' }
 
 for (const route of routes) {
   const url = `https://scifibooks.netlify.app${route.path}`
-  const page = htmlPage({ ...route, url })
+  const body = `<main><h1>${esc(route.title)}</h1><p>${esc(route.description)}</p><p>SCIFIUNIVERSE · Archivo estelar de la estación orbital K-7.</p><a href="/#navegante">Abrir catálogo</a></main>`
+  const page = htmlPage({ ...route, url, body })
   const dir = resolve(root, route.path.slice(1))
   await mkdir(dir, { recursive: true })
   await writeFile(resolve(dir, 'index.html'), page)
 }
+
+const homeDescription = 'Archivo orbital de ciencia ficción: explora 100 volúmenes y sus universos.'
+const homeBody = '<main><h1>SCIFIUNIVERSE — Archivo Estelar</h1><p>100 volúmenes de ciencia ficción catalogados desde la estación orbital K-7.</p><nav><a href="/diario">07 · Diario · Transmisión del día</a> · <a href="/bitacora">Bitácora personal</a> · <a href="/#navegante">Catálogo</a></nav></main>'
+await writeFile(resolve(root, 'index.html'), htmlPage({ title: 'SCIFIUNIVERSE — Archivo Estelar', description: homeDescription, url: 'https://scifibooks.netlify.app/', body: homeBody }))
 
 for (const book of books) {
   const title = `${book.title} — ${book.code} | SCIFIUNIVERSE`

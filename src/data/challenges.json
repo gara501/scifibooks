@@ -1,0 +1,6 @@
+[
+  { "id": "asimov", "title": "Ruta Asimov", "description": "Lee el catálogo de Isaac Asimov.", "criterion": "author", "value": "Isaac Asimov" },
+  { "id": "first-contact", "title": "Primer contacto", "description": "Lee obras con contacto alienígena indicado en su subgénero.", "criterion": "tag-contains", "value": "contacto alienígena|contacto extraterrestre" },
+  { "id": "dystopia", "title": "Distopías esenciales", "description": "Lee las distopías del archivo.", "criterion": "tag-contains", "value": "distopía" },
+  { "id": "twelve-genres", "title": "12 subgéneros", "description": "Explora doce subgéneros distintos.", "criterion": "distinct-tags", "target": 12 }
+]

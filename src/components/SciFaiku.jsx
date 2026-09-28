@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ChevronLeft, ChevronRight, RadioTower, Share2 } from 'lucide-react'
 import { shareImageCard } from '@/lib/shareImage'
 
-const poems = [
+export const poems = [
   ['Pasan los milenios', 'y solo miro', 'desde mi frasco.'],
   ['Rompiendo las reglas, clono a mi esposa', 'quizás esta vez mantenga su amor'],
   ['en estos radiactivos', 'páramos de la Tierra…', 'el llanto estridente de un loco'],

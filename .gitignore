@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Generated at build or used as task-local cache
+/public/og/
+/.npm-cache/
+/.tmp/
