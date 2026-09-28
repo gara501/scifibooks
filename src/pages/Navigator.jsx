@@ -1,10 +1,11 @@
 import { useDeferredValue, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ChevronLeft, ChevronRight, Crosshair, Radar, RotateCcw, Search, SlidersHorizontal } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import BookCard from '@/components/BookCard'
-import BookModal from '@/components/BookModal'
 import { books } from '@/data/books'
 import { genreOptions, getBookCoordinates, scenarioOptions } from '@/lib/bookCoordinates'
+import { useReadingLog } from '@/lib/readingLog'
 
 const MIN_YEAR = Math.min(...books.map((book) => book.year))
 const MAX_YEAR = Math.max(...books.map((book) => book.year))
@@ -26,24 +27,30 @@ function ConsoleField({ label, value, onChange, options }) {
 }
 
 export default function Navigator() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const readingLog = useReadingLog()
   const [query, setQuery] = useState('')
   const [genre, setGenre] = useState('TODOS')
   const [scenario, setScenario] = useState('TODOS')
   const [hardness, setHardness] = useState('TODOS')
+  const [readingFilter, setReadingFilter] = useState('all')
   const [fromYear, setFromYear] = useState(MIN_YEAR)
   const [toYear, setToYear] = useState(MAX_YEAR)
   const [page, setPage] = useState(0)
-  const [active, setActive] = useState(null)
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase('es'))
 
   const filtered = useMemo(() => books.filter((book) => {
     const coordinates = getBookCoordinates(book)
     const matchesText = !deferredQuery || `${book.title} ${book.author} ${book.desc}`.toLocaleLowerCase('es').includes(deferredQuery)
+    const record = readingLog.books[book.code]
+    const matchesReading = readingFilter === 'all' || (readingFilter === 'unread' ? record?.status !== 'read' : record?.status || record?.favorite)
     return matchesText && book.year >= fromYear && book.year <= toYear
+      && matchesReading
       && (genre === 'TODOS' || coordinates.genre === genre)
       && (scenario === 'TODOS' || coordinates.scenario === scenario)
       && (hardness === 'TODOS' || coordinates.hardness === hardness)
-  }), [deferredQuery, fromYear, genre, hardness, scenario, toYear])
+  }), [deferredQuery, fromYear, genre, hardness, readingFilter, readingLog, scenario, toYear])
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const safePage = Math.min(page, pageCount - 1)
@@ -73,6 +80,7 @@ export default function Navigator() {
             </header>
 
             <div className="relative grid gap-5 p-4 sm:p-6 lg:grid-cols-4">
+              <label className="lg:col-span-2"><span className={labelClass}>BITÁCORA DE A BORDO<span className="text-primary">LOG</span></span><select value={readingFilter} onChange={(event) => { setReadingFilter(event.target.value); setPage(0) }} className={selectClass}><option value="all">Todos los volúmenes</option><option value="unread">No leídos</option><option value="list">Mi lista</option></select></label>
               <label className="lg:col-span-2"><span className={labelClass}>SEÑAL / TÍTULO / AUTOR<span className="text-primary">TXT</span></span><span className="relative block"><Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-primary/70" /><input value={query} onChange={(event) => { setQuery(event.target.value); setPage(0) }} placeholder="BUSCAR EN EL ARCHIVO..." className={`${selectClass} pl-10`} /></span></label>
               <ConsoleField label="SUBGÉNERO" value={genre} onChange={update(setGenre)} options={genres} />
               <ConsoleField label="ESCENARIO" value={scenario} onChange={update(setScenario)} options={scenarioOptions} />
@@ -97,8 +105,8 @@ export default function Navigator() {
           </div>
 
           <AnimatePresence mode="wait">
-            <motion.div key={`${genre}-${scenario}-${hardness}-${fromYear}-${toYear}-${deferredQuery}-${safePage}`} initial={{ opacity: 0, filter: 'blur(10px)', clipPath: 'inset(0 0 100% 0)' }} animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0 0% 0)' }} exit={{ opacity: 0, filter: 'blur(8px)' }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {visibleBooks.map((book, index) => <BookCard key={book.code} book={book} index={index} onOpen={() => setActive(book)} />)}
+            <motion.div key={`${genre}-${scenario}-${hardness}-${readingFilter}-${fromYear}-${toYear}-${deferredQuery}-${safePage}`} initial={{ opacity: 0, filter: 'blur(10px)', clipPath: 'inset(0 0 100% 0)' }} animate={{ opacity: 1, filter: 'blur(0px)', clipPath: 'inset(0 0 0% 0)' }} exit={{ opacity: 0, filter: 'blur(8px)' }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {visibleBooks.map((book, index) => <BookCard key={book.code} book={book} index={index} onOpen={() => navigate(`/libro/${book.slug}`, { state: { background: location } })} />)}
             </motion.div>
           </AnimatePresence>
 
@@ -106,7 +114,6 @@ export default function Navigator() {
 
           {pageCount > 1 ? <nav aria-label="Paginación de resultados" className="mt-10 flex items-center justify-center gap-4"><button type="button" disabled={safePage === 0} onClick={() => { setPage((current) => Math.max(0, current - 1)); returnToNavigator() }} className="grid size-11 place-items-center border border-primary/25 text-primary disabled:opacity-25"><ChevronLeft className="size-4" /><span className="sr-only">Página anterior</span></button><span className="min-w-24 text-center text-xs tracking-[0.2em] text-muted-foreground">{String(safePage + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}</span><button type="button" disabled={safePage === pageCount - 1} onClick={() => { setPage((current) => Math.min(pageCount - 1, current + 1)); returnToNavigator() }} className="grid size-11 place-items-center border border-primary/25 text-primary disabled:opacity-25"><ChevronRight className="size-4" /><span className="sr-only">Página siguiente</span></button></nav> : null}
         </div>
-      <BookModal book={active} onSwitch={setActive} onClose={() => setActive(null)} />
     </section>
   )
 }

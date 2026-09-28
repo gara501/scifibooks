@@ -1,10 +1,12 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { useState } from 'react'
 import { Dialog } from 'radix-ui'
-import { X, CalendarDays, User, Tag, Users, ChevronRight } from 'lucide-react'
+import { X, CalendarDays, User, Tag, Users, ChevronRight, Share2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { books } from '@/data/books'
+import { updateReadingLog, useReadingLog } from '@/lib/readingLog'
 
 const panel = {
   hidden: {
@@ -59,9 +61,28 @@ const charItem = {
 
 export default function BookModal({ book, onSwitch, onClose }) {
   const reduceMotion = useReducedMotion()
+  const [toast, setToast] = useState('')
+  const readingLog = useReadingLog()
   const related = book
     ? books.filter((b) => b.tag === book.tag && b.code !== book.code).slice(0, 3)
     : []
+
+  const transmit = async () => {
+    const url = `${window.location.origin}/libro/${book.slug}`
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: book.title, text: `${book.author} · ${book.year} — ${book.code}`, url })
+        return
+      }
+      await navigator.clipboard.writeText(url)
+      setToast('Enlace copiado al portapapeles')
+      window.setTimeout(() => setToast(''), 2500)
+    } catch (error) {
+      if (error?.name === 'AbortError') return
+      setToast('No se pudo copiar el enlace')
+      window.setTimeout(() => setToast(''), 2500)
+    }
+  }
 
   return (
     <Dialog.Root open={!!book} onOpenChange={(open) => !open && onClose()}>
@@ -181,6 +202,14 @@ export default function BookModal({ book, onSwitch, onClose }) {
                         {book.desc}
                       </motion.p>
 
+                      <motion.div variants={item} className="flex flex-wrap items-center gap-2 border-y border-primary/15 py-3">
+                        <label className="sr-only" htmlFor="expediente-reading-status">Estado de lectura</label>
+                        <select id="expediente-reading-status" value={readingLog.books[book.code]?.status || ''} onChange={(event) => updateReadingLog(book.code, { status: event.target.value })} className="min-h-11 min-w-0 flex-1 border border-primary/25 bg-background px-3 text-xs text-foreground focus-visible:outline-2 focus-visible:outline-primary">
+                          <option value="">AÑADIR A BITÁCORA</option><option value="read">LEÍDO</option><option value="reading">LEYENDO</option><option value="pending">PENDIENTE</option>
+                        </select>
+                        <button type="button" aria-pressed={readingLog.books[book.code]?.favorite || false} onClick={() => updateReadingLog(book.code, { favorite: !readingLog.books[book.code]?.favorite })} className="min-h-11 border border-primary/25 px-4 text-xs text-primary hover:bg-primary/10">{readingLog.books[book.code]?.favorite ? '★ FAVORITO' : '☆ FAVORITO'}</button>
+                      </motion.div>
+
                       {/* tripulación / personajes */}
                       <motion.div variants={item}>
                         <p className="mb-3 flex items-center gap-2 text-[0.6rem] tracking-[0.3em] text-muted-foreground">
@@ -222,16 +251,18 @@ export default function BookModal({ book, onSwitch, onClose }) {
                         </motion.div>
                       )}
 
-                      <motion.div variants={item} className="flex items-center justify-between pt-2">
+                      <motion.div variants={item} className="flex flex-wrap items-center justify-between gap-2 pt-2">
                         <Dialog.Close asChild>
                           <Button className="min-h-11 w-full font-heading text-[0.65rem] font-bold tracking-[0.18em] sm:w-auto sm:tracking-[0.2em]">
                             CERRAR EXPEDIENTE
                           </Button>
                         </Dialog.Close>
+                        <Button type="button" variant="outline" onClick={transmit} className="min-h-11 w-full gap-2 font-heading text-[0.65rem] font-bold tracking-[0.18em] sm:w-auto"><Share2 className="size-4" /> TRANSMITIR</Button>
                         <span className="hidden text-[0.6rem] tracking-[0.25em] text-muted-foreground sm:block">
                           [ESC] PARA SALIR
                         </span>
                       </motion.div>
+                      {toast && <p role="status" className="border border-signal/40 bg-signal/5 px-3 py-2 text-xs text-signal">{toast}</p>}
                     </div>
                   </div>
                 </div>
