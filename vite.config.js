@@ -21,6 +21,7 @@ export default defineConfig({
       urlPattern: ({ request }) => request.mode === 'navigate', handler: 'NetworkFirst', options: { cacheName: 'scifi-pages', networkTimeoutSeconds: 3, expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 30 } },
     }] },
   })],
+  build: { rolldownOptions: { output: { codeSplitting: { groups: [{ name: 'motion-vendor', test: /[\\/]node_modules[\\/](?:motion|motion-dom|motion-utils)[\\/]/, priority: 20 }] } } } },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
