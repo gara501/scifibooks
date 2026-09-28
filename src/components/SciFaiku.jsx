@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ChevronLeft, ChevronRight, RadioTower } from 'lucide-react'
+import { ChevronLeft, ChevronRight, RadioTower, Share2 } from 'lucide-react'
+import { shareImageCard } from '@/lib/shareImage'
 
 const poems = [
   ['Pasan los milenios', 'y solo miro', 'desde mi frasco.'],
@@ -16,8 +17,13 @@ const poems = [
   ['¿qué sucede', 'cuando los fantasmas del fin de los tiempos', 'dan con el camino de regreso al ahora?'],
 ]
 
+const poemIds = poems.map((_, index) => `poem-${String(index + 1).padStart(2, '0')}`)
+
 export default function SciFaiku() {
-  const [active, setActive] = useState(0)
+  const initialId = window.location.hash.match(/^#scifaiku-(poem-\d+)$/)?.[1]
+  const [active, setActive] = useState(Math.max(0, poemIds.indexOf(initialId)))
+  const [shareNotice, setShareNotice] = useState('')
+  const firstRender = useRef(true)
   const [direction, setDirection] = useState(1)
   const [paused, setPaused] = useState(false)
   const reduceMotion = useReducedMotion()
@@ -26,6 +32,12 @@ export default function SciFaiku() {
     setDirection(index > active ? 1 : -1)
     setActive((index + poems.length) % poems.length)
   }
+
+  useEffect(() => {
+    if (firstRender.current) { firstRender.current = false; return undefined }
+    const hash = "#scifaiku-" + poemIds[active]
+    if (window.location.hash !== hash) window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search + hash)
+  }, [active])
 
   useEffect(() => {
     if (paused || reduceMotion) return undefined
@@ -80,6 +92,7 @@ export default function SciFaiku() {
 
         <div
           className="relative border border-primary/25 bg-card/55 shadow-[0_0_80px_oklch(0.84_0.165_82/0.07)] backdrop-blur-sm"
+          onTouchStart={() => setPaused(true)}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocusCapture={() => setPaused(true)}
@@ -94,6 +107,7 @@ export default function SciFaiku() {
             <AnimatePresence mode="wait" custom={direction}>
               <motion.blockquote
                 key={active}
+                id={"scifaiku-" + poemIds[active]}
                 custom={direction}
                 initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: direction * 70, filter: 'blur(7px)' }}
                 animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
@@ -114,7 +128,7 @@ export default function SciFaiku() {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between gap-2 border-t border-primary/15 px-3 py-3 md:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-primary/15 px-3 py-3 md:px-6">
             <button
               type="button"
               onClick={() => goTo(active - 1)}
@@ -146,6 +160,8 @@ export default function SciFaiku() {
               <ChevronRight className="size-4" />
             </button>
           </div>
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:ml-auto"><button type="button" onClick={() => setPaused((value) => !value)} aria-pressed={paused} className="min-h-11 border border-primary/25 px-3 text-[0.58rem] tracking-[0.08em] text-primary">{paused ? "REANUDAR" : "PAUSAR"} AUTOAVANCE</button><button type="button" onClick={() => shareImageCard("SCIFAIKU", poems[active].join(String.fromCharCode(10)), "scifaiku-" + poemIds[active]).then(setShareNotice).catch(() => setShareNotice("No se pudo generar la tarjeta."))} className="inline-flex min-h-11 items-center gap-2 border border-signal/40 px-3 text-[0.58rem] text-signal"><Share2 size={14} /> COMPARTIR TARJETA</button></div>
+          {shareNotice && <p role="status" className="border-t border-primary/15 px-4 py-2 text-xs text-signal">{shareNotice}</p>}
         </div>
       </div>
     </section>

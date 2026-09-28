@@ -7,6 +7,7 @@ import Footer from '@/components/Footer'
 import BookModal from '@/components/BookModal'
 import { books } from '@/data/books'
 import { edges } from '@/utils/influences'
+import { useReadingLog } from '@/lib/readingLog'
 
 function Meta({ book }) {
   useEffect(() => {
@@ -54,8 +55,9 @@ export function BookRouteModal() {
 export default function BookPage() {
   const { slug } = useParams()
   const book = books.find((item) => item.slug === slug)
+  const readingLog = useReadingLog()
   const relatedCodes = new Set(edges.flatMap((edge) => edge.source === book?.code ? [edge.target] : edge.target === book?.code ? [edge.source] : []))
-  const related = book ? books.filter((item) => item.code !== book.code).map((item) => ({ item, score: (item.tag === book.tag ? 5 : item.tag.split(' / ')[0] === book.tag.split(' / ')[0] ? 2 : 0) + (relatedCodes.has(item.code) ? 4 : 0) - Math.abs(item.year - book.year) / 100 })).sort((a, b) => b.score - a.score).slice(0, 4).map(({ item }) => item) : []
+  const related = book ? books.filter((item) => item.code !== book.code && readingLog.books[item.code]?.status !== 'read').map((item) => ({ item, score: (item.tag === book.tag ? 5 : item.tag.split(' / ')[0] === book.tag.split(' / ')[0] ? 2 : 0) + (relatedCodes.has(item.code) ? 4 : 0) - Math.abs(item.year - book.year) / 100 })).sort((a, b) => b.score - a.score).slice(0, 4).map(({ item }) => item) : []
 
   if (!book) return <main className="grid min-h-screen place-items-center bg-background px-5 text-center text-foreground"><div><p className="text-[0.65rem] tracking-[0.3em] text-primary">ESTACIÓN K-7 // ARCHIVO</p><h1 className="mt-5 font-heading text-3xl font-black">Volumen no encontrado en el archivo</h1><Link className="mt-7 inline-flex min-h-11 items-center gap-2 border border-primary/40 px-4 text-xs text-primary" to="/#navegante"><ArrowLeft size={16} /> VOLVER AL CATÁLOGO</Link></div></main>
 

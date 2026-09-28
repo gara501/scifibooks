@@ -1,10 +1,11 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import { ArrowLeft, Atom, Gauge, Orbit, Radio, Ruler, Zap } from 'lucide-react'
 import Backdrop from '@/components/Backdrop'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { Link } from 'react-router-dom'
+import { shareImageCard } from '@/lib/shareImage'
 
 const G = 9.80665
 const LIGHT_YEAR_KM = 9.4607304725808e12
@@ -25,13 +26,15 @@ function NumericField({ label, value, onChange, min, max, step = 'any', suffix }
   )
 }
 
-function ResultPanel({ eyebrow, value, children }) {
+function ResultPanel({ eyebrow, value, children, shareText = value }) {
+  const [notice, setNotice] = useState('')
   return (
     <div className="relative overflow-hidden border border-primary/30 bg-primary/[0.055] p-5 sm:p-6">
       <div className="absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 blur-3xl" />
       <p className="relative text-[0.6rem] tracking-[0.24em] text-primary">{eyebrow}</p>
       <p className="relative mt-3 font-heading text-2xl font-bold text-primary text-glow sm:text-3xl">{value}</p>
       <div className="relative mt-4 text-sm leading-7 text-muted-foreground">{children}</div>
+      <button type="button" onClick={() => shareImageCard(eyebrow, shareText, 'resultado-calculo').then(setNotice).catch(() => setNotice('No se pudo crear la tarjeta.'))} className="relative mt-5 inline-flex min-h-11 items-center gap-2 border border-signal/40 px-4 text-[0.62rem] tracking-[0.12em] text-signal"><Radio className="size-4" /> TRANSMITIR RESULTADO</button>{notice && <p role="status" className="relative mt-2 text-xs text-signal">{notice}</p>}
     </div>
   )
 }
@@ -56,27 +59,36 @@ function ModuleShell({ id, code, icon: Icon, title, concept, reference, children
 }
 
 function TimeDilation() {
-  const [shipYears, setShipYears] = useState('5')
-  const [speed, setSpeed] = useState('95')
+  const params = new URLSearchParams(window.location.search)
+  const [distance, setDistance] = useState(params.get('sim') === 'dilatacion' ? (params.get('d') || '4.2') : '4.2')
+  const [speed, setSpeed] = useState(params.get('sim') === 'dilatacion' ? String(Number(params.get('v') || 0.95) * 100) : '95')
+  const initialized = useRef(false)
   const result = useMemo(() => {
-    const years = Math.max(0, Number(shipYears) || 0)
-    const beta = Math.min(0.999999, Math.max(0, (Number(speed) || 0) / 100))
+    const years = Math.max(0, Number(distance) || 0)
+    const beta = Math.min(0.999999, Math.max(0.000001, (Number(speed) || 0) / 100))
     const gamma = 1 / Math.sqrt(1 - beta ** 2)
-    const earthYears = years * gamma
-    const difference = earthYears - years
-    return { gamma, earthYears, difference }
-  }, [shipYears, speed])
+    const earthYears = (2 * years) / beta
+    const shipYears = earthYears / gamma
+    const difference = earthYears - shipYears
+    return { gamma, earthYears, shipYears, difference, beta }
+  }, [distance, speed])
+  useEffect(() => {
+    if (!initialized.current) { initialized.current = true; return }
+    const query = new URLSearchParams(window.location.search)
+    query.set('sim', 'dilatacion'); query.set('v', result.beta.toFixed(4)); query.set('d', String(distance))
+    window.history.replaceState(window.history.state, '', `${window.location.pathname}?${query.toString()}${window.location.hash}`)
+  }, [distance, result.beta])
   const generation = result.difference < 18 ? 'la misma generación aún te espera' : result.difference < 40 ? 'tus contemporáneos ya pertenecen a otra etapa de vida' : 'han transcurrido varias generaciones humanas'
 
   return (
     <ModuleShell id="dilatacion" code="A" icon={Gauge} title="Dilatación temporal" concept="Compara el tiempo propio de una tripulación con el tiempo medido desde la Tierra a velocidad relativista." reference="La guerra interminable · Joe Haldeman / Tau Zero · Poul Anderson">
       <div className="grid content-start gap-5">
-        <NumericField label="TIEMPO PARA LA TRIPULACIÓN" value={shipYears} onChange={setShipYears} min="0" step="0.1" suffix="AÑOS" />
+        <NumericField label="DISTANCIA DEL DESTINO" value={distance} onChange={setDistance} min="0" step="0.1" suffix="AÑOS LUZ" />
         <NumericField label="VELOCIDAD DE LA NAVE" value={speed} onChange={setSpeed} min="0" max="99.9999" step="0.1" suffix="% DE c" />
         <input aria-label="Velocidad de la nave" type="range" min="0" max="99.9" step="0.1" value={Math.min(Number(speed) || 0, 99.9)} onChange={(event) => setSpeed(event.target.value)} className="w-full accent-[var(--phosphor)]" />
       </div>
-      <ResultPanel eyebrow="TIEMPO TRANSCURRIDO EN LA TIERRA" value={`${result.earthYears.toFixed(2)} años`}>
-        <p>La diferencia es de <strong className="text-foreground">{result.difference.toFixed(2)} años</strong>. Factor de Lorentz γ = {result.gamma.toFixed(3)}; {generation}.</p>
+      <ResultPanel eyebrow="TIEMPO TRANSCURRIDO EN LA TIERRA" value={`${result.earthYears.toFixed(2)} años`} shareText={`Viajé a ${result.beta.toFixed(2)}c hacia un destino a ${distance} años luz: al volver habían pasado ${result.earthYears.toFixed(2)} años en la Tierra.`}>
+        <p>Viaje de ida y vuelta: <strong className="text-foreground">{result.earthYears.toFixed(2)} años en la Tierra</strong> y {result.shipYears.toFixed(2)} años para la tripulación. Factor de Lorentz γ = {result.gamma.toFixed(3)}; {generation}.</p>
         <p className="mt-3 text-xs">t Tierra = t nave / √(1 − v²/c²)</p>
       </ResultPanel>
     </ModuleShell>
@@ -84,8 +96,10 @@ function TimeDilation() {
 }
 
 function RotationGravity() {
-  const [radius, setRadius] = useState('100')
-  const [gravity, setGravity] = useState('1')
+  const params = new URLSearchParams(window.location.search)
+  const [radius, setRadius] = useState(params.get('sim') === 'gravedad' ? (params.get('r') || '100') : '100')
+  const [gravity, setGravity] = useState(params.get('sim') === 'gravedad' ? (params.get('g') || '1') : '1')
+  const initialized = useRef(false)
   const result = useMemo(() => {
     const r = Math.max(0.1, Number(radius) || 0.1)
     const acceleration = Math.max(0, Number(gravity) || 0) * G
@@ -94,6 +108,7 @@ function RotationGravity() {
     const coriolis = 2 * omega * 1.4
     return { rpm, coriolis, acceleration }
   }, [radius, gravity])
+  useEffect(() => { if (!initialized.current) { initialized.current = true; return } const query = new URLSearchParams(window.location.search); query.set('sim', 'gravedad'); query.set('r', radius); query.set('g', gravity); window.history.replaceState(window.history.state, '', `${window.location.pathname}?${query.toString()}${window.location.hash}`) }, [radius, gravity])
   const comfort = result.rpm < 2 ? 'rotación suave' : result.rpm < 4 ? 'Coriolis perceptible' : 'rotación intensa; posible desorientación'
 
   return (
@@ -111,8 +126,11 @@ function RotationGravity() {
 }
 
 function Kardashev() {
-  const [power, setPower] = useState('20000000000000')
+  const params = new URLSearchParams(window.location.search)
+  const [power, setPower] = useState(params.get('sim') === 'kardashev' ? (params.get('p') || '20000000000000') : '20000000000000')
+  const initialized = useRef(false)
   const presets = [{ label: 'PLANETARIA', value: 1e16 }, { label: 'ESTELAR', value: 1e26 }, { label: 'GALÁCTICA', value: 1e36 }]
+  useEffect(() => { if (!initialized.current) { initialized.current = true; return } const query = new URLSearchParams(window.location.search); query.set('sim', 'kardashev'); query.set('p', power); window.history.replaceState(window.history.state, '', `${window.location.pathname}?${query.toString()}${window.location.hash}`) }, [power])
   const watts = Math.max(1, Number(power) || 1)
   const level = (Math.log10(watts) - 6) / 10
   const civilization = level < 1 ? 'Civilización planetaria emergente' : level < 2 ? 'Civilización Tipo I' : level < 3 ? 'Civilización Tipo II' : 'Civilización Tipo III o superior'
@@ -134,9 +152,12 @@ function Kardashev() {
 }
 
 function LoreConverter() {
-  const [mode, setMode] = useState('distance')
-  const [value, setValue] = useState('12')
-  const [factor, setFactor] = useState('1000')
+  const params = new URLSearchParams(window.location.search)
+  const [mode, setMode] = useState(params.get('sim') === 'lore' ? (params.get('mode') || 'distance') : 'distance')
+  const [value, setValue] = useState(params.get('sim') === 'lore' ? (params.get('value') || '12') : '12')
+  const [factor, setFactor] = useState(params.get('sim') === 'lore' ? (params.get('factor') || '1000') : '1000')
+  const initialized = useRef(false)
+  useEffect(() => { if (!initialized.current) { initialized.current = true; return } const query = new URLSearchParams(window.location.search); query.set('sim', 'lore'); query.set('mode', mode); query.set('value', value); query.set('factor', factor); window.history.replaceState(window.history.state, '', `${window.location.pathname}?${query.toString()}${window.location.hash}`) }, [mode, value, factor])
   const amount = Math.max(0, Number(value) || 0)
   let headline = ''
   let detail = ''
