@@ -11,7 +11,7 @@ const routes = [
   { path: '/calculus', title: 'Simuladores de ciencia ficción', description: 'Explora gravedad rotacional, dilatación temporal y escala de Kardashev.' },
   { path: '/influencias', title: 'Red de influencias', description: 'Conexiones entre obras, autores y linajes de la ciencia ficción.' },
   { path: '/diario', title: 'Descifra la transmisión', description: 'Una señal diaria de ciencia ficción te espera en la estación K-7.' },
-  { path: '/bitacora', title: 'Bitácora de lectura', description: 'Registra tu rumbo entre los 100 volúmenes del archivo.' },
+  { path: '/bitacora', title: 'Bitácora de lectura', description: 'Registra tu rumbo entre los 101 volúmenes del archivo.' },
 ]
 
 function htmlPage({ title, description, url, image = '/og/site.png', body = '' }) {
@@ -32,8 +32,8 @@ for (const route of routes) {
   await writeFile(resolve(dir, 'index.html'), page)
 }
 
-const homeDescription = 'Archivo orbital de ciencia ficción: explora 100 volúmenes y sus universos.'
-const homeBody = '<main><h1>SCIFIUNIVERSE — Archivo Estelar</h1><p>100 volúmenes de ciencia ficción catalogados desde la estación orbital K-7.</p><nav><a href="/diario">07 · Diario · Transmisión del día</a> · <a href="/bitacora">Bitácora personal</a> · <a href="/#navegante">Catálogo</a></nav></main>'
+const homeDescription = 'Archivo orbital de ciencia ficción: explora 101 volúmenes y sus universos.'
+const homeBody = '<main><h1>SCIFIUNIVERSE — Archivo Estelar</h1><p>101 volúmenes de ciencia ficción catalogados desde la estación orbital K-7.</p><nav><a href="/diario">07 · Diario · Transmisión del día</a> · <a href="/bitacora">Bitácora personal</a> · <a href="/#navegante">Catálogo</a></nav></main>'
 await writeFile(resolve(root, 'index.html'), htmlPage({ title: 'SCIFIUNIVERSE — Archivo Estelar', description: homeDescription, url: 'https://scifibooks.netlify.app/', body: homeBody }))
 
 for (const book of books) {

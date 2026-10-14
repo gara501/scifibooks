@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { books } from '@/data/books'
 import { updateReadingLog, useReadingLog } from '@/lib/readingLog'
+import BookMedia from '@/components/BookMedia'
 
 const panel = {
   hidden: {
@@ -229,6 +230,8 @@ export default function BookModal({ book, onSwitch, onClose }) {
                           ))}
                         </motion.ul>
                       </motion.div>
+
+                      <BookMedia book={book} />
 
                       {/* registros relacionados */}
                       {related.length > 0 && (

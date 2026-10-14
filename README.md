@@ -1,5 +1,21 @@
 # React + Vite
 
+## Multimedia de los expedientes
+
+Cada libro de `src/data/books.json` puede incluir un arreglo opcional `media`.
+Cada elemento contiene `title`, `url` (HTTPS) y, opcionalmente, `creator`.
+Asocia únicamente publicaciones cuyo libro se haya confirmado; el enlace al
+perfil del creador no sirve para identificar qué libro aparece en un video.
+
+Los enlaces completos de TikTok (`https://www.tiktok.com/@usuario/video/ID`
+o `/photo/ID`) permiten cargar su reproductor oficial al pulsar el botón.
+Los enlaces cortos y otras fuentes se muestran como enlaces externos.
+El enlace original siempre permanece visible, incluso cuando TikTok impide
+la reproducción. La sección aparece tanto en el modal como en la página del
+libro, y permanece oculta si el expediente todavía no tiene multimedia.
+
+Ejecuta `npm run validate:data` para comprobar los registros y enlaces.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:

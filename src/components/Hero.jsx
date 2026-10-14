@@ -27,8 +27,8 @@ const logLines = [
 ]
 
 const stats = [
-  { value: '100', label: 'VOLÚMENES' },
-  { value: '142', label: 'MUNDOS MAPEADOS', help: 'Escenarios, planetas, estaciones y realidades narrativas distintos presentes en los 100 volúmenes.' },
+  { value: '101', label: 'VOLÚMENES' },
+  { value: '142', label: 'MUNDOS MAPEADOS', help: 'Escenarios, planetas, estaciones y realidades narrativas distintos presentes en los 101 volúmenes.' },
   { value: '09', label: 'SEÑALES ACTIVAS' },
   { value: '99.7%', label: 'INTEGRIDAD' },
 ]
@@ -73,7 +73,7 @@ export default function Hero() {
             variants={fade}
             className="mt-8 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base"
           >
-            100 volúmenes de ciencia ficción catalogados desde la estación orbital.
+            101 volúmenes de ciencia ficción catalogados desde la estación orbital.
             Cada señal interceptada es un mundo; cada mundo, un libro esperando
             ser abierto.
             <span className="ml-2 inline-block h-4 w-2 translate-y-0.5 animate-blink bg-primary" />
@@ -172,7 +172,7 @@ export default function Hero() {
             <dt className="order-2 mt-2 break-words text-[0.55rem] tracking-[0.18em] text-muted-foreground sm:text-[0.6rem] sm:tracking-[0.3em]">
               {stat.label}
             </dt>
-            {stat.help ? <p className="order-3 mt-2 text-[0.52rem] leading-4 tracking-[0.05em] text-muted-foreground/75">DISTINTOS ESCENARIOS Y REALIDADES EN LOS 100 LIBROS</p> : null}
+            {stat.help ? <p className="order-3 mt-2 text-[0.52rem] leading-4 tracking-[0.05em] text-muted-foreground/75">DISTINTOS ESCENARIOS Y REALIDADES EN LOS 101 LIBROS</p> : null}
           </div>
         ))}
       </motion.dl>

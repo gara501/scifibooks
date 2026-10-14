@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" role="img" aria-label="Ilustración de La prisión de la libertad: puertas abiertas en un laberinto imposible">
+  <defs>
+    <radialGradient id="sky"><stop stop-color="#244454"/><stop offset="1" stop-color="#080d16"/></radialGradient>
+    <linearGradient id="light" x2="0" y2="1"><stop stop-color="#ffe3a1"/><stop offset="1" stop-color="#c88a44"/></linearGradient>
+    <linearGradient id="floor" x2="0" y2="1"><stop stop-color="#b78952" stop-opacity=".5"/><stop offset="1" stop-color="#b78952" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="800" height="1200" fill="url(#sky)"/>
+  <circle cx="400" cy="270" r="130" fill="none" stroke="#d5b57d" opacity=".18"/>
+  <g fill="none" stroke="#9ab3b9" stroke-width="2" opacity=".3">
+    <path d="M0 970 400 630 800 970M0 1100 400 760 800 1100M70 1200 400 890 730 1200"/>
+    <path d="M0 430 160 340 160 730 0 820M800 430 640 340 640 730 800 820"/>
+    <path d="M0 555 160 465M0 680 160 590M800 555 640 465M800 680 640 590"/>
+  </g>
+  <path d="M205 800V350Q400 115 595 350V800" fill="#0b121c" stroke="#bd9b68" stroke-width="3"/>
+  <path d="M270 790V385Q400 215 530 385V790" fill="#152b36" stroke="#bd9b68" stroke-width="2"/>
+  <path d="M330 785V420Q400 320 470 420V785Z" fill="url(#light)"/>
+  <path d="M330 420 405 453V820L330 785Z" fill="#12222a" stroke="#d4ad6e" stroke-width="2"/>
+  <circle cx="389" cy="632" r="4" fill="#ffe3a1"/>
+  <path d="M405 790 470 785 710 1200H90Z" fill="url(#floor)"/>
+  <g fill="#d5e4df" opacity=".65"><circle cx="100" cy="190" r="2"/><circle cx="650" cy="160" r="2"/><circle cx="205" cy="95" r="1.5"/><circle cx="735" cy="290" r="1.5"/><circle cx="80" cy="370" r="1.5"/></g>
+  <path d="M367 866h15v43h-15z" fill="#080d16"/><circle cx="375" cy="857" r="9" fill="#080d16"/>
+</svg>

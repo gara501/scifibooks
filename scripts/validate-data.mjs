@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { getBookMediaUrl } from '../src/lib/bookMedia.js'
 
 const file = resolve('src/data/books.json')
 const books = JSON.parse(readFileSync(file, 'utf8'))
@@ -15,6 +16,22 @@ for (const [index, book] of books.entries()) {
     }
   }
   if (!Array.isArray(book.chars)) errors.push(`${row}: "chars" debe ser un arreglo`)
+  if (book.media !== undefined) {
+    if (!Array.isArray(book.media)) {
+      errors.push(`${row}: "media" debe ser un arreglo`)
+    } else {
+      const mediaUrls = new Set()
+      for (const entry of book.media) {
+        if (!entry || typeof entry.title !== 'string' || !entry.title.trim() || !getBookMediaUrl(entry.url)) {
+          errors.push(`${row}: cada elemento multimedia necesita title y una URL HTTPS válida`)
+          continue
+        }
+        if (entry.creator !== undefined && typeof entry.creator !== 'string') errors.push(`${row}: creator debe ser texto`)
+        if (mediaUrls.has(entry.url)) errors.push(`${row}: enlace multimedia duplicado "${entry.url}"`)
+        mediaUrls.add(entry.url)
+      }
+    }
+  }
   if (book.code) {
     if (seen.has(book.code)) errors.push(`${row}: code duplicado`)
     seen.add(book.code)

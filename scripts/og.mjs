@@ -23,7 +23,7 @@ async function render({ book, slug = 'site', title, subtitle, hue = 82 }) {
     cover ? h('img', { key: 'cover', src: cover, width: 350, height: 525, style: { objectFit: 'cover', border: `2px solid ${accent}` } }) : null,
     h('div', { key: 'text', style: { display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1, position: 'relative' } }, [
       h('div', { key: 'brand', style: { color: accent, fontSize: 22, letterSpacing: 6, marginBottom: 30 } }, 'SCIFIUNIVERSE · ESTACIÓN K-7'),
-      h('div', { key: 'code', style: { color: accent, fontSize: 18, letterSpacing: 4, marginBottom: 18 } }, book ? `${book.code}  /  ${book.tag}` : 'ARCHIVO ESTELAR · 100 VOLÚMENES'),
+      h('div', { key: 'code', style: { color: accent, fontSize: 18, letterSpacing: 4, marginBottom: 18 } }, book ? `${book.code}  /  ${book.tag}` : 'ARCHIVO ESTELAR · 101 VOLÚMENES'),
       h('div', { key: 'title', style: { fontSize: book ? 40 : 52, lineHeight: 1.2, fontWeight: 700 } }, title),
       h('div', { key: 'sub', style: { marginTop: 22, color: '#b9b4a8', fontSize: 22 } }, subtitle),
       book ? h('div', { key: 'year', style: { marginTop: 16, color: accent, fontSize: 18 } }, `${book.author}  ·  ${book.year}`) : null,
@@ -35,5 +35,5 @@ async function render({ book, slug = 'site', title, subtitle, hue = 82 }) {
 }
 
 for (const book of books) await render({ book, slug: book.slug, title: book.title, subtitle: book.desc, hue: book.hue })
-await render({ slug: 'site', title: 'Archivo estelar de ciencia ficción', subtitle: '100 volúmenes · Una estación orbital para explorar el futuro.' })
+await render({ slug: 'site', title: 'Archivo estelar de ciencia ficción', subtitle: '101 volúmenes · Una estación orbital para explorar el futuro.' })
 console.log(`Tarjetas OG generadas: ${books.length + 1}`)

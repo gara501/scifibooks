@@ -33,7 +33,14 @@
     ],
     "cover": "/covers/illustrated/sf-002.webp",
     "hue": 305,
-    "slug": "sf-002"
+    "slug": "sf-002",
+    "media": [
+      {
+        "title": "Neuromante · @scificol",
+        "url": "https://www.tiktok.com/@scificol/video/7696390610894572820",
+        "creator": "@scificol"
+      }
+    ]
   },
   {
     "code": "SF-003",
@@ -67,7 +74,14 @@
     ],
     "cover": "/covers/illustrated/sf-004.webp",
     "hue": 12,
-    "slug": "sf-004"
+    "slug": "sf-004",
+    "media": [
+      {
+        "title": "1984 · @scificol",
+        "url": "https://www.tiktok.com/@scificol/video/7695243237824400661",
+        "creator": "@scificol"
+      }
+    ]
   },
   {
     "code": "SF-005",
@@ -84,7 +98,14 @@
     ],
     "cover": "/covers/illustrated/sf-005.webp",
     "hue": 12,
-    "slug": "sf-005"
+    "slug": "sf-005",
+    "media": [
+      {
+        "title": "Un mundo feliz · @scificol",
+        "url": "https://www.tiktok.com/@scificol/video/7696628328094256404",
+        "creator": "@scificol"
+      }
+    ]
   },
   {
     "code": "SF-006",
@@ -566,7 +587,14 @@
     ],
     "cover": "/covers/illustrated/sf-034.webp",
     "hue": 20,
-    "slug": "sf-034"
+    "slug": "sf-034",
+    "media": [
+      {
+        "title": "La guerra interminable · @scificol",
+        "url": "https://www.tiktok.com/@scificol/video/7695254524931411220",
+        "creator": "@scificol"
+      }
+    ]
   },
   {
     "code": "SF-035",
@@ -1636,5 +1664,29 @@
     "cover": "/covers/illustrated/sf-100.webp",
     "hue": 280,
     "slug": "sf-100"
+  },
+  {
+    "code": "SF-101",
+    "title": "La prisión de la libertad",
+    "author": "Michael Ende",
+    "year": 1992,
+    "tag": "Fantasía Filosófica / Relatos",
+    "desc": "Ocho relatos fantásticos exploran la libertad, el deseo y los límites de la realidad a través de viajes, arquitecturas imposibles y mundos que oscilan entre el sueño y la pesadilla.",
+    "chars": [
+      "Cyril Abercromby",
+      "Borromeo Colmi",
+      "Max Muto",
+      "Insh’allah"
+    ],
+    "cover": "/covers/unique/sf-101.svg",
+    "hue": 38,
+    "slug": "sf-101",
+    "media": [
+      {
+        "title": "La prisión de la libertad · @scificol",
+        "url": "https://www.tiktok.com/@scificol/video/7694890670892322069",
+        "creator": "@scificol"
+      }
+    ]
   }
 ]
