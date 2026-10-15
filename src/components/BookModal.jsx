@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import { books } from '@/data/books'
 import { updateReadingLog, useReadingLog } from '@/lib/readingLog'
 import BookMedia from '@/components/BookMedia'
+import { Link } from 'react-router-dom'
 
 const panel = {
   hidden: {
@@ -232,6 +233,7 @@ export default function BookModal({ book, onSwitch, onClose }) {
                       </motion.div>
 
                       <BookMedia book={book} />
+                      <Link to={`/comparar?a=${book.slug}&b=`} className="inline-flex min-h-11 items-center border border-signal/40 px-4 text-xs text-signal hover:bg-signal/10">COMPARAR CON OTRO LIBRO ↗</Link>
 
                       {/* registros relacionados */}
                       {related.length > 0 && (

@@ -20,8 +20,10 @@ const BookPage = lazy(() => import('@/pages/BookPage'))
 const BookRouteModal = lazy(() => import('@/pages/BookPage').then((module) => ({ default: module.BookRouteModal })))
 const Bitacora = lazy(() => import('@/pages/Bitacora'))
 const Diario = lazy(() => import('@/pages/Diario'))
+const Compare = lazy(() => import('@/pages/Compare'))
 
 const routeMeta = {
+  '/comparar': ['Comparador — SCIFIUNIVERSE', 'Compara dos libros: temas, tono, dificultad y extensión por edición.'],
   '/': ['SCIFIUNIVERSE — Archivo Estelar', 'Archivo orbital de ciencia ficción: explora 100 volúmenes y sus universos.'],
   '/timetravel': ['Cronología — SCIFIUNIVERSE', 'Recorre la historia y las épocas de la ciencia ficción.'],
   '/calculus': ['Simuladores — SCIFIUNIVERSE', 'Calcula gravedad rotacional, dilatación temporal y escala de Kardashev.'],
@@ -121,6 +123,7 @@ function App() {
         <Route path="/libro/:slug" element={<Suspense fallback={null}><BookPage /></Suspense>} />
         <Route path="/bitacora" element={<Suspense fallback={null}><Bitacora /></Suspense>} />
         <Route path="/diario" element={<Suspense fallback={null}><Diario /></Suspense>} />
+        <Route path="/comparar" element={<Suspense fallback={null}><Compare /></Suspense>} />
         <Route path="/navegante" element={<Navigate to="/#navegante" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

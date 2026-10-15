@@ -7,6 +7,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../dist')
 const template = await readFile(resolve(root, 'index.html'), 'utf8')
 const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char])
 const routes = [
+  { path: '/comparar', title: 'Comparador de libros', description: 'Compara temas, tono, dificultad y extensión por edición de dos libros del archivo.' },
   { path: '/timetravel', title: 'Cronología de la ciencia ficción', description: 'Explora la evolución temporal de la ciencia ficción en SCIFIUNIVERSE.' },
   { path: '/calculus', title: 'Simuladores de ciencia ficción', description: 'Explora gravedad rotacional, dilatación temporal y escala de Kardashev.' },
   { path: '/influencias', title: 'Red de influencias', description: 'Conexiones entre obras, autores y linajes de la ciencia ficción.' },

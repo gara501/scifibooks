@@ -1,7 +1,7 @@
 import { useDeferredValue, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { ChevronLeft, ChevronRight, Crosshair, Radar, RotateCcw, Search, SlidersHorizontal } from 'lucide-react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import BookCard from '@/components/BookCard'
 import { books } from '@/data/books'
 import { genreOptions, getBookCoordinates, scenarioOptions } from '@/lib/bookCoordinates'
@@ -70,6 +70,7 @@ export default function Navigator() {
             <p className="mb-4 flex items-center gap-2 text-[0.62rem] tracking-[0.3em] text-primary"><Radar className="size-4" /> // SISTEMA DE NAVEGACIÓN BIBLIOGRÁFICA</p>
             <h1 className="font-heading text-[clamp(2.4rem,8vw,6rem)] leading-none font-extrabold tracking-tight">NAVE<span className="text-primary text-glow">GANTE</span></h1>
             <p className="mt-6 max-w-3xl text-sm leading-7 text-muted-foreground md:text-base">Introduce tus coordenadas. El radar cruzará época, tradición narrativa, escenario y dureza científica para localizar tu próxima lectura.</p>
+            <Link to="/comparar" className="mt-5 inline-flex min-h-11 items-center border border-signal/40 px-4 text-xs text-signal transition-colors hover:bg-signal/10">¿ENTRE DOS LIBROS? ABRE EL COMPARADOR ↗</Link>
           </motion.header>
 
           <motion.section initial={{ opacity: 0, scale: 0.98 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: '-60px' }} transition={{ delay: 0.15, duration: 0.65 }} className="relative mb-12 overflow-hidden border border-primary/30 bg-card/70 shadow-[0_0_70px_oklch(0.84_0.165_82/8%)]">
